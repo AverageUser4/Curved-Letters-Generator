@@ -1,0 +1,61 @@
+body {
+  margin: 0;
+  background-color: #252525;
+  color: #fff;
+  text-shadow: 1px 1px black;
+  font-family: sans-serif;
+}
+
+input[type=number], input[type=range] {
+  width: 100px;
+}
+
+.reset-button {
+  display: block;
+  margin-top: 16px;
+}
+
+.config-label {
+  display: block;
+  margin-top: 16px;
+  text-align: right;
+  user-select: none;
+}
+
+.the-header {
+  background-color: #111;
+  padding: 24px 0;
+}
+
+.the-header__heading {
+  margin: 0;
+  text-align: center;
+}
+
+.the-main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 64px;
+  padding: 24px 0;
+}
+
+.the-main__svg {
+  outline: 5px solid #000;
+  background-color: #393939;
+}
+
+.inputs-container {
+  display: flex;
+  width: 250px;
+  justify-content: center;
+  gap: 12px;
+}
+.inputs-container span {
+  display: block;
+  width: 30px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+/*# sourceMappingURL=main.css.map */

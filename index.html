@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="css/main.css">
+  <script type="module" src="js/main.js"></script>
+
+</head>
+
+<body>
+
+  <header class="the-header">
+
+    <h1 class="the-header__heading">Curved Text Generator</h1>
+
+  </header>
+
+  <main class="the-main">
+
+    <div class="the-main__svg-container">
+
+      <svg
+        class="the-main__svg"
+        xmlns="http://www.w3.org/2000/svg" 
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        viewBox="0 0 500 500"
+        width="500"
+        >
+    
+        <path id="ctg-text-path" stroke="red" fill="transparent"></path>
+
+        <text text-anchor="middle" font-size="44">
+          <textPath xlink:href="#ctg-text-path">My Curved Text :)</textPath>
+        </text>
+
+      </svg>
+
+    </div>
+
+    <div class="the-main__controls-container">
+
+      <fieldset data-path-inputs-container="yes">
+
+        <legend>Path:</legend>
+
+        <fieldset>
+
+          <legend>Start Point:</legend>
+
+          <div class="inputs-container" data-number-and-range="1" data-inputs-container="startPointX">
+            <span>X:</span>
+            <input type="number" min="-1000" max="1000">
+            <input type="range" min="-1000" max="1000">
+          </div>
+
+          <div class="inputs-container" data-number-and-range="1" data-inputs-container="startPointY">
+            <span>Y:</span>
+            <input type="number" min="-1000" max="1000">
+            <input type="range" min="-1000" max="1000">
+          </div>
+
+        </fieldset>
+
+        <fieldset>
+
+          <legend>Control Point:</legend>
+
+          <div class="inputs-container" data-number-and-range="1" data-inputs-container="controlPointX">
+            <span>X:</span>
+            <input type="number" min="-1000" max="1000">
+            <input type="range" min="-1000" max="1000">
+          </div>
+
+          <div class="inputs-container" data-number-and-range="1" data-inputs-container="controlPointY">
+            <span>Y:</span>
+            <input type="number" min="-1000" max="1000">
+            <input type="range" min="-1000" max="1000">
+          </div>
+
+        </fieldset>
+
+        <fieldset>
+
+          <legend>End Point:</legend>
+
+          <div class="inputs-container" data-number-and-range="1" data-inputs-container="endPointX">
+            <span>X:</span>
+            <input type="number" min="-1000" max="1000">
+            <input type="range" min="-1000" max="1000">
+          </div>
+
+          <div class="inputs-container" data-number-and-range="1" data-inputs-container="endPointY">
+            <span>Y:</span>
+            <input type="number" min="-1000" max="1000">
+            <input type="range" min="-1000" max="1000">
+          </div>
+
+        </fieldset>
+
+        <button data-reset-button="path" class="reset-button">RESET</button>
+
+      </fieldset>
+
+      <fieldset data-text-inputs-container="yes">
+
+        <legend>Text:</legend>
+
+        <fieldset>
+
+          <legend>Your text:</legend>
+
+          <div class="inputs-container" data-inputs-container="textContent">
+            <input type="text">
+          </div>
+
+        </fieldset>
+
+        <fieldset>
+
+          <legend>Font-size:</legend>
+
+          <div class="inputs-container" data-number-and-range="1" data-inputs-container="fontSize">
+            <input type="number" min="-1000" max="1000">
+            <input type="range" min="-1000" max="1000">
+          </div>
+
+        </fieldset>
+
+        <fieldset>
+
+          <legend>X:</legend>
+
+          <div class="inputs-container" data-number-and-range="1" data-inputs-container="textX">
+            <input type="number" min="-1000" max="1000">
+            <input type="range" min="-1000" max="1000">
+          </div>
+
+          <label class="config-label">Auto-adjust:<input type="checkbox" checked></label>
+
+        </fieldset>
+
+        <button data-reset-button="text" class="reset-button">RESET</button>
+
+      </fieldset>
+
+    </div>
+
+  </main>
+
+</body>
+
+</html>

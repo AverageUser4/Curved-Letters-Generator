@@ -1,0 +1,2 @@
+- losowe id ścieżki, żeby było można użyć kilku na jednej stronie
+- canvas that is as small as possible gets generated at the end

@@ -6,6 +6,10 @@ body {
   font-family: sans-serif;
 }
 
+circle:hover {
+  cursor: pointer;
+}
+
 input[type=number], input[type=range] {
   width: 100px;
 }
@@ -35,10 +39,10 @@ input[type=number], input[type=range] {
 .the-main {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
   gap: 64px;
 
-  padding: 24px 0;
+  padding: 24px;
 }
 
 .the-main__svg {

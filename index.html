@@ -39,6 +39,10 @@
           <textPath data-text-path="1" xlink:href="#ctg-text-path">My Curved Text :)</textPath>
         </text>
 
+        <circle data-path-circle="start" cx="10" cy="250" r="5" fill="green"></circle>
+        <circle data-path-circle="control" cx="250" cy="100" r="5" fill="green"></circle>
+        <circle data-path-circle="end" cx="490" cy="250" r="5" fill="green"></circle>
+
       </svg>
 
     </div>
@@ -103,7 +107,7 @@
 
         </fieldset>
 
-        <button data-reset-button="path" class="reset-button">RESET</button>
+        <button data-button="reset-path" class="reset-button">RESET</button>
 
       </fieldset>
 
@@ -172,12 +176,12 @@
 
       </fieldset>
 
-      <fieldset data-outer-container="file">
+      <fieldset data-outer-container="svg">
 
-        <legend>File:</legend>
+        <legend>SVG:</legend>
 
-        <button id="crop-button">CROP</button>
-        <button id="svg-reset-button">RESET</button>
+        <button data-button="crop-svg">CROP</button>
+        <button data-button="reset-svg">RESET</button>
 
       </fieldset>
 

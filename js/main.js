@@ -7,6 +7,8 @@ const epy = 250;
 
 class TheHandler {
 
+  focusedCircle = null;
+
   textAutoCenter = true;
 
   points = {};
@@ -20,29 +22,95 @@ class TheHandler {
   }
 
   constructor() {
-    const path = document.querySelector('[data-path]');
-    const textPath = document.querySelector('[data-text-path]');
-    const id = `ctg-text-path-${Math.random()}`;
-    path.setAttributeNS(null, 'id', id);
-    textPath.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + id);
-
     this.svg = document.querySelector('svg');
     this.text = document.querySelector('text');
     this.readableSource = document.querySelector('#readable-source-container');
+    this.path = document.querySelector('path');
+
+    this.#randmiseId();
     this.updateReadableSource();
 
-    const doubleInputsContainers = document.querySelectorAll('[data-number-and-range]');
-    for(let val of doubleInputsContainers) {
-      const number = val.querySelector('input[type="number"]');
-      const range = val.querySelector('input[type="range"]');
-    
-      number.addEventListener('input', (event) => this.doubleInputUpdate(event));
-      range.addEventListener('input', (event) => this.doubleInputUpdate(event));
-    }
+    this.#addTextListeners();
 
+    this.resetPath();
+    this.updateText();
 
+    this.#addPathListeners();
+    this.#addButtonListeners();
+
+    this.#addCircleListeners();
+
+    // sync adjacent inputs
+    for(let val of document.querySelectorAll('[data-number-and-range]'))
+      for(let val_2 of val.querySelectorAll('[type="number"], [type="range"]'))
+        val_2.addEventListener('input', (event) => this.doubleInputUpdate(event));
+  }
+
+  #addCircleListeners() {
+    const circles = document.querySelectorAll('[data-path-circle]');
+
+    window.addEventListener('click', (event) => {
+      for(let val of circles) {
+        if(val === this.focusedCircle)
+          this.focusedCircle = null;
+        else if(val === event.target)
+          this.focusedCircle = val;
+      }
+    });
+
+    window.addEventListener('mousemove', (event) => {
+      if(!this.focusedCircle)
+        return;
+
+      const svgRect = this.svg.getBoundingClientRect();
+
+      const x = event.pageX - svgRect.x;
+      const y = event.pageY - svgRect.y;
+
+      this.focusedCircle.setAttributeNS(null, 'cx', x);
+      this.focusedCircle.setAttributeNS(null, 'cy', y);
+
+      switch(this.focusedCircle.getAttributeNS(null, 'data-path-circle')) {
+        case 'start':
+          this.points.startPointX = x;
+          this.points.startPointY = y;
+          break;
+
+        case 'control':
+          this.points.controlPointX = x;
+          this.points.controlPointY = y;
+          break;
+
+        case 'end':
+          this.points.endPointX = x;
+          this.points.endPointY = y;
+          break;
+      }
+
+      this.updatePath();
+    });
+  }
+
+  #addButtonListeners() {
+    document.querySelector('[data-button="reset-path"]').addEventListener('click', () => this.resetPath());
+    document.querySelector('[data-button="crop-svg"]').addEventListener('click', () => this.adjustSVGSize());
+    document.querySelector('[data-button="reset-svg"]').addEventListener('click', () => {
+      this.svg.setAttributeNS(null, 'viewBox', `0 0 500 500`);
+      this.svg.setAttributeNS(null, 'width', 500);
+    });
+  }
+
+  #randmiseId() {
+    const path = document.querySelector('[data-path]');
+    const textPath = document.querySelector('[data-text-path]');
+    const id = `ctg-text-path-${Math.random().toFixed(5)}`;
+    path.setAttributeNS(null, 'id', id);
+    textPath.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + id);
+  }
+
+  #addTextListeners() {
     const textContentInput = 
-      document.querySelector('[data-text-inputs-container="textContent"').children[0];
+    document.querySelector('[data-text-inputs-container="textContent"').children[0];
 
     textContentInput.addEventListener('input', (event) => {
       this.font.textContent = event.currentTarget.value;
@@ -61,13 +129,11 @@ class TheHandler {
       });
     }
 
-    const textXInputs = 
+    this.textXInputs = 
       document.querySelector('[data-text-inputs-container="textX"')
       .querySelectorAll('input[type="number"], input[type="range"]');
 
-    this.anTextXInput = textXInputs[0];
-
-    for(let val of textXInputs) {
+    for(let val of this.textXInputs) {
       val.value = this.font.x;
       val.addEventListener('input', () => {
         this.font.x = val.value;
@@ -89,14 +155,10 @@ class TheHandler {
       this.font.anchor = textAnchorSelect.value;
       this.updateText();
     });
-  
 
-    this.path = document.querySelector('path');
-    this.pathResetButton = document.querySelector('[data-reset-button="path"]');
-    this.pathResetButton.addEventListener('click', () => this.resetPath());
+  }
 
-    this.resetPath();
-
+  #addPathListeners() {
     for(let key in this.points) {
       const inputContainer = 
         document.querySelector(`[data-point-inputs-container="${key}"`);
@@ -109,53 +171,6 @@ class TheHandler {
       numberInput.addEventListener('input', (event) => this.pathInputUpdate(event));
       rangeInput.addEventListener('input', (event) => this.pathInputUpdate(event));
     }
-
-    this.updatePath();
-    this.updateText();
-
-    document.querySelector('#crop-button').addEventListener('click', () => this.adjustSVGSize());
-    document.querySelector('#svg-reset-button').addEventListener('click', () => {
-      this.svg.setAttributeNS(null, 'viewBox', `0 0 500 500`);
-      this.svg.setAttributeNS(null, 'width', 500);
-    });
-  }
-
-
-  updateReadableSource() {
-    this.readableSource.textContent = this.svg.outerHTML;
-  }
-
-  adjustSVGSize() {
-    const svgRect = this.svg.getBoundingClientRect();
-    const textRect = this.text.getBoundingClientRect();
-
-    let textOffsetX = Math.round(Math.abs(svgRect.x - textRect.x));
-    let textOffsetY = Math.round(Math.abs(svgRect.y - textRect.y));
-
-    if(textRect.x > svgRect.x)
-      textOffsetX *= -1;
-
-    if(textRect.y > svgRect.y)
-      textOffsetY *= -1;
-
-    console.log(this.points)
-
-    this.points.startPointX += textOffsetX;
-    this.points.controlPointX += textOffsetX;
-    this.points.endPointX += textOffsetX;
-    this.points.startPointY += textOffsetY;
-    this.points.controlPointY += textOffsetY;
-    this.points.endPointY += textOffsetY;
-
-    console.log(this.points)
-
-    const w = textRect.width;
-    const h = textRect.height;
-    this.svg.setAttributeNS(null, 'viewBox', `0 0 ${w} ${h}`);
-    this.svg.setAttributeNS(null, 'width', w);
-
-    this.updatePath();
-    this.updateText();
   }
 
   updateText() {
@@ -185,8 +200,11 @@ class TheHandler {
          ${this.points.endPointX},${this.points.endPointY}`
     );
 
-    if(this.textAutoCenter)
+    if(this.textAutoCenter) {
       this.text.setAttributeNS(null, 'x', this.points.controlPointX);
+      for(let val of this.textXInputs)
+        val.value = this.points.controlPointX;
+    }
 
     this.updateReadableSource();
   }
@@ -207,6 +225,51 @@ class TheHandler {
     
     for(let val of ct.parentElement.querySelectorAll('input'))
       val.value = value;
+  }
+
+  updateReadableSource() {
+    let source = this.svg.outerHTML
+      .replace('stroke="red"', '')
+      .replace('class="the-main__svg"', '')
+      .replace('data-path="1"', '')
+      .replace('data-text-path="1"', '');
+
+    this.readableSource.textContent = source
+      .replace(
+        source.slice(
+          source.indexOf('<circle'),
+          source.lastIndexOf('</circle>') + 9
+        ), ''
+      );
+  }
+
+  adjustSVGSize() {
+    const svgRect = this.svg.getBoundingClientRect();
+    const textRect = this.text.getBoundingClientRect();
+
+    let textOffsetX = Math.round(Math.abs(svgRect.x - textRect.x));
+    let textOffsetY = Math.round(Math.abs(svgRect.y - textRect.y));
+
+    if(textRect.x > svgRect.x)
+      textOffsetX *= -1;
+
+    if(textRect.y > svgRect.y)
+      textOffsetY *= -1;
+
+    this.points.startPointX += textOffsetX;
+    this.points.controlPointX += textOffsetX;
+    this.points.endPointX += textOffsetX;
+    this.points.startPointY += textOffsetY;
+    this.points.controlPointY += textOffsetY;
+    this.points.endPointY += textOffsetY;
+
+    const w = textRect.width;
+    const h = textRect.height;
+    this.svg.setAttributeNS(null, 'viewBox', `0 0 ${w} ${h}`);
+    this.svg.setAttributeNS(null, 'width', w);
+
+    this.updatePath();
+    this.updateText();
   }
 
 }

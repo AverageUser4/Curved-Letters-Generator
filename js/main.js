@@ -8,8 +8,10 @@ const epy = 250;
 class TheHandler {
 
   focusedCircle = null;
+  allFocusButtons;
 
   textAutoCenter = true;
+  textXInputs;
 
   points = {};
 
@@ -19,15 +21,21 @@ class TheHandler {
     x: 250,
     anchor: 'middle',
     family: null
-  }
+  };
 
   constructor() {
+    this.pointInputs = document.querySelectorAll('[data-point-inputs-container]');
+
     this.svg = document.querySelector('svg');
     this.text = document.querySelector('text');
     this.readableSource = document.querySelector('#readable-source-container');
     this.path = document.querySelector('path');
 
-    this.#randmiseId();
+    this.startCircle = document.querySelector('[data-path-circle="start"]');
+    this.controlCircle = document.querySelector('[data-path-circle="control"]');
+    this.endCircle = document.querySelector('[data-path-circle="end"]');
+
+    this.#randomiseId();
     this.updateReadableSource();
 
     this.#addTextListeners();
@@ -46,15 +54,31 @@ class TheHandler {
         val_2.addEventListener('input', (event) => this.doubleInputUpdate(event));
   }
 
+  updateInputs() {
+    for(let val of this.pointInputs)
+      for (let val_2 of val.querySelectorAll('[type="range"], [type="number"]'))
+        val_2.value = this.points[val.getAttribute('data-point-inputs-container')];
+  }
+
   #addCircleListeners() {
     const circles = document.querySelectorAll('[data-path-circle]');
 
     window.addEventListener('click', (event) => {
       for(let val of circles) {
-        if(val === this.focusedCircle)
+        if(val === this.focusedCircle) {
           this.focusedCircle = null;
-        else if(val === event.target)
+          for(let val_2 of this.allFocusButtons)
+            val_2.classList.remove('focus-button--active');
+        }
+        else if(val === event.target) {
           this.focusedCircle = val;
+          for(let val_2 of this.allFocusButtons)
+            if(
+                val_2.getAttribute('data-button-focus') === 
+                this.focusedCircle.getAttributeNS(null, 'data-path-circle')  
+              )
+            val_2.classList.add('focus-button--active');
+        }
       }
     });
 
@@ -97,10 +121,34 @@ class TheHandler {
     document.querySelector('[data-button="reset-svg"]').addEventListener('click', () => {
       this.svg.setAttributeNS(null, 'viewBox', `0 0 500 500`);
       this.svg.setAttributeNS(null, 'width', 500);
+      this.updateInputs();
     });
+
+    this.allFocusButtons = document.querySelectorAll('[data-button-focus]');
+
+    for(let val of this.allFocusButtons) {
+      val.addEventListener('click', (event) => {
+        const which = event.currentTarget.getAttribute('data-button-focus');
+
+        if(this.focusedCircle === this[`${which}Circle`]) {
+          event.currentTarget.classList.remove('focus-button--active');
+          this.focusedCircle = null;
+          return;
+        }
+
+        for(let val of this.allFocusButtons)
+          val.classList.remove('focus-button--active');
+
+        event.currentTarget.classList.add('focus-button--active');
+
+        this.focusedCircle = this[`${which}Circle`];
+
+        event.stopPropagation();
+      });
+    }
   }
 
-  #randmiseId() {
+  #randomiseId() {
     const path = document.querySelector('[data-path]');
     const textPath = document.querySelector('[data-text-path]');
     const id = `ctg-text-path-${Math.random().toFixed(5)}`;
@@ -159,14 +207,17 @@ class TheHandler {
   }
 
   #addPathListeners() {
-    for(let key in this.points) {
+    const names = ['startPointX', 'startPointY', 
+      'controlPointX', 'controlPointY', 'endPointX', 'endPointY']
+
+    for(let val of names) {
       const inputContainer = 
-        document.querySelector(`[data-point-inputs-container="${key}"`);
+        document.querySelector(`[data-point-inputs-container="${val}"`);
 
       const numberInput = inputContainer.querySelector('input[type="number"]');
       const rangeInput = inputContainer.querySelector('input[type="range"]');
 
-      numberInput.value = rangeInput.value = this.points[key];
+      numberInput.value = rangeInput.value = this.points[val];
 
       numberInput.addEventListener('input', (event) => this.pathInputUpdate(event));
       rangeInput.addEventListener('input', (event) => this.pathInputUpdate(event));
@@ -207,6 +258,12 @@ class TheHandler {
     }
 
     this.updateReadableSource();
+    this.updateInputs();
+  }
+
+  updateCircle(which) {
+    this[`${which}Circle`].setAttributeNS(null, 'cx', this.points[`${which}PointX`]);
+    this[`${which}Circle`].setAttributeNS(null, 'cy', this.points[`${which}PointY`]);
   }
 
   pathInputUpdate(event) {
@@ -215,6 +272,8 @@ class TheHandler {
 
     const parameter = ct.parentElement.getAttribute('data-point-inputs-container');
     this.points[parameter] = Number(value);
+
+    this.updateCircle(parameter.slice(0, parameter.indexOf('Point')));
 
     this.updatePath();
   }
@@ -270,8 +329,29 @@ class TheHandler {
 
     this.updatePath();
     this.updateText();
+    this.updateInputs();
   }
 
 }
 
 export default new TheHandler;
+
+const styleSheet = new CSSStyleSheet();
+document.adoptedStyleSheets.push(styleSheet);
+
+const f = document.querySelector('[type="file"]');
+
+f.addEventListener('change', () => {
+  const reader = new FileReader();
+  reader.addEventListener('load', (event) => {
+    console.log(event.target.result);
+    styleSheet.insertRule(`
+      @font-face {
+        font-family: penis;
+        src: url(${event.target.result});
+      }
+    `);
+  });
+  reader.readAsDataURL(f.files[0]);
+  
+});

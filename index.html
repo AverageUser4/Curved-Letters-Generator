@@ -7,7 +7,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Curved Text Generator | The Future is Here</title>
   <link rel="stylesheet" href="css/main.css">
   <script type="module" src="js/main.js"></script>
 
@@ -57,6 +57,8 @@
 
           <legend>Start Point:</legend>
 
+          <button class="focus-button" data-button-focus="start">Focus</button>
+
           <div class="inputs-container" data-number-and-range="1" data-point-inputs-container="startPointX">
             <span>X:</span>
             <input type="number" min="-1000" max="1000">
@@ -75,6 +77,8 @@
 
           <legend>Control Point:</legend>
 
+          <button class="focus-button" data-button-focus="control">Focus</button>
+
           <div class="inputs-container" data-number-and-range="1" data-point-inputs-container="controlPointX">
             <span>X:</span>
             <input type="number" min="-1000" max="1000">
@@ -92,6 +96,8 @@
         <fieldset>
 
           <legend>End Point:</legend>
+
+          <button class="focus-button" data-button-focus="end">Focus</button>
 
           <div class="inputs-container" data-number-and-range="1" data-point-inputs-container="endPointX">
             <span>X:</span>
@@ -168,8 +174,7 @@
           <legend>Font family:</legend>
 
           <div class="inputs-container" data-text-inputs-container="fontFamily">
-            <span>Coming soon...</span>
-            <input type="file" disabled>
+            <input type="file">
           </div>
 
         </fieldset>

@@ -3,7 +3,7 @@ body {
   background-color: #252525;
   color: #fff;
   text-shadow: 1px 1px black;
-  font-family: sans-serif;
+  font-family: penis, sans-serif;
 }
 
 circle:hover {
@@ -17,6 +17,16 @@ input[type=number], input[type=range] {
 .reset-button {
   display: block;
   margin-top: 16px;
+}
+
+.focus-button {
+  margin-bottom: 6px;
+  display: block;
+  width: 100%;
+}
+
+.focus-button--active {
+  background-color: hotpink;
 }
 
 .config-label {

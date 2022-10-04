@@ -129,8 +129,8 @@ class TheHandler {
     const svgRect = this.svg.getBoundingClientRect();
     const textRect = this.text.getBoundingClientRect();
 
-    let textOffsetX = Math.abs(svgRect.x - textRect.x);
-    let textOffsetY = Math.abs(svgRect.y - textRect.y);
+    let textOffsetX = Math.round(Math.abs(svgRect.x - textRect.x));
+    let textOffsetY = Math.round(Math.abs(svgRect.y - textRect.y));
 
     if(textRect.x > svgRect.x)
       textOffsetX *= -1;
@@ -138,12 +138,16 @@ class TheHandler {
     if(textRect.y > svgRect.y)
       textOffsetY *= -1;
 
+    console.log(this.points)
+
     this.points.startPointX += textOffsetX;
     this.points.controlPointX += textOffsetX;
     this.points.endPointX += textOffsetX;
     this.points.startPointY += textOffsetY;
     this.points.controlPointY += textOffsetY;
     this.points.endPointY += textOffsetY;
+
+    console.log(this.points)
 
     const w = textRect.width;
     const h = textRect.height;
@@ -192,7 +196,7 @@ class TheHandler {
     const value = ct.value;
 
     const parameter = ct.parentElement.getAttribute('data-point-inputs-container');
-    this.points[parameter] = value;
+    this.points[parameter] = Number(value);
 
     this.updatePath();
   }

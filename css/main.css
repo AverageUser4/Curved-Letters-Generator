@@ -58,4 +58,14 @@ input[type=number], input[type=range] {
   text-align: center;
 }
 
+.the-footer {
+  padding: 8px;
+  text-align: center;
+  background-color: #111;
+}
+
+#readable-source-container {
+  width: 300px;
+}
+
 /*# sourceMappingURL=main.css.map */

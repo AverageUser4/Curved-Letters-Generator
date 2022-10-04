@@ -33,10 +33,10 @@
         width="500"
         >
     
-        <path id="ctg-text-path" stroke="red" fill="transparent"></path>
+        <path data-path="1" id="ctg-text-path" stroke="red" fill="transparent"></path>
 
-        <text text-anchor="middle" font-size="44">
-          <textPath xlink:href="#ctg-text-path">My Curved Text :)</textPath>
+        <text text-anchor="middle">
+          <textPath data-text-path="1" xlink:href="#ctg-text-path">My Curved Text :)</textPath>
         </text>
 
       </svg>
@@ -45,7 +45,7 @@
 
     <div class="the-main__controls-container">
 
-      <fieldset data-path-inputs-container="yes">
+      <fieldset data-outer-container="path">
 
         <legend>Path:</legend>
 
@@ -53,13 +53,13 @@
 
           <legend>Start Point:</legend>
 
-          <div class="inputs-container" data-number-and-range="1" data-inputs-container="startPointX">
+          <div class="inputs-container" data-number-and-range="1" data-point-inputs-container="startPointX">
             <span>X:</span>
             <input type="number" min="-1000" max="1000">
             <input type="range" min="-1000" max="1000">
           </div>
 
-          <div class="inputs-container" data-number-and-range="1" data-inputs-container="startPointY">
+          <div class="inputs-container" data-number-and-range="1" data-point-inputs-container="startPointY">
             <span>Y:</span>
             <input type="number" min="-1000" max="1000">
             <input type="range" min="-1000" max="1000">
@@ -71,13 +71,13 @@
 
           <legend>Control Point:</legend>
 
-          <div class="inputs-container" data-number-and-range="1" data-inputs-container="controlPointX">
+          <div class="inputs-container" data-number-and-range="1" data-point-inputs-container="controlPointX">
             <span>X:</span>
             <input type="number" min="-1000" max="1000">
             <input type="range" min="-1000" max="1000">
           </div>
 
-          <div class="inputs-container" data-number-and-range="1" data-inputs-container="controlPointY">
+          <div class="inputs-container" data-number-and-range="1" data-point-inputs-container="controlPointY">
             <span>Y:</span>
             <input type="number" min="-1000" max="1000">
             <input type="range" min="-1000" max="1000">
@@ -89,13 +89,13 @@
 
           <legend>End Point:</legend>
 
-          <div class="inputs-container" data-number-and-range="1" data-inputs-container="endPointX">
+          <div class="inputs-container" data-number-and-range="1" data-point-inputs-container="endPointX">
             <span>X:</span>
             <input type="number" min="-1000" max="1000">
             <input type="range" min="-1000" max="1000">
           </div>
 
-          <div class="inputs-container" data-number-and-range="1" data-inputs-container="endPointY">
+          <div class="inputs-container" data-number-and-range="1" data-point-inputs-container="endPointY">
             <span>Y:</span>
             <input type="number" min="-1000" max="1000">
             <input type="range" min="-1000" max="1000">
@@ -107,7 +107,7 @@
 
       </fieldset>
 
-      <fieldset data-text-inputs-container="yes">
+      <fieldset data-outer-container="text">
 
         <legend>Text:</legend>
 
@@ -115,8 +115,8 @@
 
           <legend>Your text:</legend>
 
-          <div class="inputs-container" data-inputs-container="textContent">
-            <input type="text">
+          <div class="inputs-container" data-text-inputs-container="textContent">
+            <input type="text" value="My Curved Text :)">
           </div>
 
         </fieldset>
@@ -125,9 +125,9 @@
 
           <legend>Font-size:</legend>
 
-          <div class="inputs-container" data-number-and-range="1" data-inputs-container="fontSize">
-            <input type="number" min="-1000" max="1000">
-            <input type="range" min="-1000" max="1000">
+          <div class="inputs-container" data-number-and-range="1" data-text-inputs-container="fontSize">
+            <input type="number" min="1" max="256">
+            <input type="range" min="1" max="256">
           </div>
 
         </fieldset>
@@ -136,22 +136,69 @@
 
           <legend>X:</legend>
 
-          <div class="inputs-container" data-number-and-range="1" data-inputs-container="textX">
+          <div class="inputs-container" data-number-and-range="1" data-text-inputs-container="textX">
             <input type="number" min="-1000" max="1000">
             <input type="range" min="-1000" max="1000">
           </div>
 
-          <label class="config-label">Auto-adjust:<input type="checkbox" checked></label>
+          <label class="config-label">Auto-adjust:<input data-config="textCenter" type="checkbox" checked></label>
 
         </fieldset>
 
-        <button data-reset-button="text" class="reset-button">RESET</button>
+        <fieldset>
+
+          <legend>Text anchor:</legend>
+
+          <div class="inputs-container" data-text-inputs-container="textAnchor">
+            <select data-input="textAnchor">
+              <option>middle</option>
+              <option>start</option>
+              <option>end</option>
+            </select>
+          </div>
+
+        </fieldset>
+
+        <fieldset>
+
+          <legend>Font family:</legend>
+
+          <div class="inputs-container" data-text-inputs-container="fontFamily">
+            <span>Coming soon...</span>
+            <input type="file" disabled>
+          </div>
+
+        </fieldset>
+
+      </fieldset>
+
+      <fieldset data-outer-container="file">
+
+        <legend>File:</legend>
+
+        <button id="crop-button">CROP</button>
+        <button id="svg-reset-button">RESET</button>
+
+      </fieldset>
+
+      <fieldset data-outer-container="source">
+
+        <legend>Source:</legend>
+
+        <p id="readable-source-container"></p>
 
       </fieldset>
 
     </div>
 
   </main>
+
+  <ul>
+    <li>Pressing 'CROP' multiple times sometimes helps.</li>
+    <li>Text might get cut if it's longer than the path.</li>
+  </ul>
+
+  <footer class="the-footer">This is the footer.</footer>
 
 </body>
 

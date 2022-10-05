@@ -1,0 +1,2 @@
+- when changing path with circles if the window
+is scrolled, the circle isn't synced up with the mouse

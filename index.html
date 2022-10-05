@@ -15,199 +15,221 @@
 
 <body>
 
-  <header class="the-header">
-
-    <h1 class="the-header__heading">Curved Text Generator</h1>
-
-  </header>
-
   <main class="the-main">
 
-    <div class="the-main__svg-container">
+    <div class="the-main__content">
+      
+      <div class="the-main__svg-container">
+  
+        <div class="the-main__svg-stretch the-main__svg-stretch--bottom"></div>
+        <div class="the-main__svg-stretch the-main__svg-stretch--right"></div>
+        <div class="the-main__svg-stretch the-main__svg-stretch--bottom-and-right"></div>
 
-      <svg
-        class="the-main__svg"
-        xmlns="http://www.w3.org/2000/svg" 
-        xmlns:xlink="http://www.w3.org/1999/xlink"
-        viewBox="0 0 500 500"
-        width="500"
-        >
-    
-        <path data-path="1" id="ctg-text-path" stroke="red" fill="transparent"></path>
-
-        <text text-anchor="middle">
-          <textPath data-text-path="1" xlink:href="#ctg-text-path">My Curved Text :)</textPath>
-        </text>
-
-        <circle data-path-circle="start" cx="10" cy="250" r="5" fill="green"></circle>
-        <circle data-path-circle="control" cx="250" cy="100" r="5" fill="green"></circle>
-        <circle data-path-circle="end" cx="490" cy="250" r="5" fill="green"></circle>
-
-      </svg>
-
-    </div>
-
-    <div class="the-main__controls-container">
-
-      <fieldset data-outer-container="path">
-
-        <legend>Path:</legend>
-
-        <fieldset>
-
-          <legend>Start Point:</legend>
-
-          <button class="focus-button" data-button-focus="start">Focus</button>
-
-          <div class="inputs-container" data-number-and-range="1" data-point-inputs-container="startPointX">
-            <span>X:</span>
-            <input type="number" min="-1000" max="1000">
-            <input type="range" min="-1000" max="1000">
-          </div>
-
-          <div class="inputs-container" data-number-and-range="1" data-point-inputs-container="startPointY">
-            <span>Y:</span>
-            <input type="number" min="-1000" max="1000">
-            <input type="range" min="-1000" max="1000">
-          </div>
-
+        <svg
+          class="the-main__svg"
+          xmlns="http://www.w3.org/2000/svg" 
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          viewBox="0 0 500 500"
+          width="500"
+          >
+      
+          <path data-path="1" id="ctg-text-path" stroke="red" fill="transparent"></path>
+  
+          <text text-anchor="middle">
+            <textPath data-text-path="1" xlink:href="#ctg-text-path">My Curved Text :)</textPath>
+          </text>
+  
+          <circle class="bezier-circle" data-path-circle="start" cx="10" cy="250" r="5" fill="green"></circle>
+          <circle class="bezier-circle" data-path-circle="control" cx="250" cy="100" r="5" fill="green"></circle>
+          <circle class="bezier-circle" data-path-circle="end" cx="490" cy="250" r="5" fill="green"></circle>
+  
+        </svg>
+  
+      </div>
+  
+      <div class="the-main__controls-container">
+  
+        <fieldset class="the-main__outer-group-container" data-outer-container="path">
+  
+          <legend>Path:</legend>
+  
+          <fieldset class="the-main__inner-group-container">
+  
+            <legend>Start Point:</legend>
+  
+            <button class="fancy-button focus-button" data-button-focus="start">Focus</button>
+  
+            <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="startPointX">
+              <span class="inputs-container__span">X:</span>
+              <input class="sync-input" type="number" min="-1000" max="1000">
+              <input class="sync-input" type="range" min="-1000" max="1000">
+            </div>
+  
+            <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="startPointY">
+              <span class="inputs-container__span">Y:</span>
+              <input class="sync-input" type="number" min="-1000" max="1000">
+              <input class="sync-input" type="range" min="-1000" max="1000">
+            </div>
+  
+          </fieldset>
+  
+          <fieldset class="the-main__inner-group-container">
+  
+            <legend>Control Point:</legend>
+  
+            <button class="fancy-button focus-button" data-button-focus="control">Focus</button>
+  
+            <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="controlPointX">
+              <span class="inputs-container__span">X:</span>
+              <input class="sync-input" type="number" min="-1000" max="1000">
+              <input class="sync-input" type="range" min="-1000" max="1000">
+            </div>
+  
+            <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="controlPointY">
+              <span class="inputs-container__span">Y:</span>
+              <input class="sync-input" type="number" min="-1000" max="1000">
+              <input class="sync-input" type="range" min="-1000" max="1000">
+            </div>
+  
+          </fieldset>
+  
+          <fieldset class="the-main__inner-group-container">
+  
+            <legend>End Point:</legend>
+  
+            <button class="fancy-button focus-button" data-button-focus="end">Focus</button>
+  
+            <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="endPointX">
+              <span class="inputs-container__span">X:</span>
+              <input class="sync-input" type="number" min="-1000" max="1000">
+              <input class="sync-input" type="range" min="-1000" max="1000">
+            </div>
+  
+            <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="endPointY">
+              <span class="inputs-container__span">Y:</span>
+              <input class="sync-input" type="number" min="-1000" max="1000">
+              <input class="sync-input" type="range" min="-1000" max="1000">
+            </div>
+  
+          </fieldset>
+  
+          <button data-button="reset-path" class="reset-button">RESET</button>
+  
         </fieldset>
-
-        <fieldset>
-
-          <legend>Control Point:</legend>
-
-          <button class="focus-button" data-button-focus="control">Focus</button>
-
-          <div class="inputs-container" data-number-and-range="1" data-point-inputs-container="controlPointX">
-            <span>X:</span>
-            <input type="number" min="-1000" max="1000">
-            <input type="range" min="-1000" max="1000">
-          </div>
-
-          <div class="inputs-container" data-number-and-range="1" data-point-inputs-container="controlPointY">
-            <span>Y:</span>
-            <input type="number" min="-1000" max="1000">
-            <input type="range" min="-1000" max="1000">
-          </div>
-
+  
+        <fieldset class="the-main__outer-group-container" data-outer-container="text">
+  
+          <legend>Text:</legend>
+  
+          <fieldset class="the-main__inner-group-container">
+  
+            <legend>Your text:</legend>
+  
+            <div class="the-main__inputs-container the-main__inputs-container--single" data-text-inputs-container="textContent">
+              <input class="single-input" type="text" value="My Curved Text :)">
+            </div>
+  
+          </fieldset>
+  
+          <fieldset class="the-main__inner-group-container">
+  
+            <legend>Font-size:</legend>
+  
+            <div class="the-main__inputs-container" data-number-and-range="1" data-text-inputs-container="fontSize">
+              <input class="sync-input" type="number" min="1" max="256">
+              <input class="sync-input" type="range" min="1" max="256">
+            </div>
+  
+          </fieldset>
+  
+          <fieldset class="the-main__inner-group-container">
+  
+            <legend>X:</legend>
+  
+            <div class="the-main__inputs-container" data-number-and-range="1" data-text-inputs-container="textX">
+              <input class="sync-input" type="number" min="-1000" max="1000">
+              <input class="sync-input" type="range" min="-1000" max="1000">
+            </div>
+  
+            <label class="config-label">Auto-adjust:<input data-config="textCenter" type="checkbox" checked></label>
+  
+          </fieldset>
+  
+          <fieldset class="the-main__inner-group-container">
+  
+            <legend>Text anchor:</legend>
+  
+            <div class="the-main__inputs-container the-main__inputs-container--single" data-text-inputs-container="textAnchor">
+              <select class="single-input" data-input="textAnchor">
+                <option>middle</option>
+                <option>start</option>
+                <option>end</option>
+              </select>
+            </div>
+  
+          </fieldset>
+  
+          <fieldset class="the-main__inner-group-container">
+  
+            <legend>Font family:</legend>
+  
+            <div class="the-main__inputs-container" data-text-inputs-container="fontFamily">
+              <input class="file-input" type="file">
+            </div>
+  
+          </fieldset>
+  
         </fieldset>
+  
+        <fieldset class="the-main__outer-group-container" data-outer-container="svg">
+  
+          <legend>SVG:</legend>
 
-        <fieldset>
+          <fieldset class="the-main__inner-group-container">
 
-          <legend>End Point:</legend>
+            <legend>Size:</legend>
 
-          <button class="focus-button" data-button-focus="end">Focus</button>
+            <div class="the-main__inputs-container" data-number-and-range="1" data-svg-inputs-container="width">
+              <span class="inputs-container__span">W:</span>
+              <input class="sync-input" type="number" min="1" max="5000">
+              <input class="sync-input" type="range" min="1" max="5000">
+            </div>
+  
+            <div class="the-main__inputs-container" data-number-and-range="1" data-svg-inputs-container="height">
+              <span class="inputs-container__span">H:</span>
+              <input class="sync-input" type="number" min="1" max="5000">
+              <input class="sync-input" type="range" min="1" max="5000">
+            </div>
 
-          <div class="inputs-container" data-number-and-range="1" data-point-inputs-container="endPointX">
-            <span>X:</span>
-            <input type="number" min="-1000" max="1000">
-            <input type="range" min="-1000" max="1000">
-          </div>
+          </fieldset>
 
-          <div class="inputs-container" data-number-and-range="1" data-point-inputs-container="endPointY">
-            <span>Y:</span>
-            <input type="number" min="-1000" max="1000">
-            <input type="range" min="-1000" max="1000">
-          </div>
-
+          <button class="fancy-button" data-button="crop-svg">CROP</button>
+          <button class="fancy-button" data-button="reset-svg">RESET</button>
+  
         </fieldset>
-
-        <button data-button="reset-path" class="reset-button">RESET</button>
-
-      </fieldset>
-
-      <fieldset data-outer-container="text">
-
-        <legend>Text:</legend>
-
-        <fieldset>
-
-          <legend>Your text:</legend>
-
-          <div class="inputs-container" data-text-inputs-container="textContent">
-            <input type="text" value="My Curved Text :)">
-          </div>
-
+  
+        <fieldset class="the-main__outer-group-container the-main__outer-group-container--for-source" data-outer-container="source">
+  
+          <legend>Source:</legend>
+  
+          <p class="the-main__readable-source-container"></p>
+  
         </fieldset>
-
-        <fieldset>
-
-          <legend>Font-size:</legend>
-
-          <div class="inputs-container" data-number-and-range="1" data-text-inputs-container="fontSize">
-            <input type="number" min="1" max="256">
-            <input type="range" min="1" max="256">
-          </div>
-
-        </fieldset>
-
-        <fieldset>
-
-          <legend>X:</legend>
-
-          <div class="inputs-container" data-number-and-range="1" data-text-inputs-container="textX">
-            <input type="number" min="-1000" max="1000">
-            <input type="range" min="-1000" max="1000">
-          </div>
-
-          <label class="config-label">Auto-adjust:<input data-config="textCenter" type="checkbox" checked></label>
-
-        </fieldset>
-
-        <fieldset>
-
-          <legend>Text anchor:</legend>
-
-          <div class="inputs-container" data-text-inputs-container="textAnchor">
-            <select data-input="textAnchor">
-              <option>middle</option>
-              <option>start</option>
-              <option>end</option>
-            </select>
-          </div>
-
-        </fieldset>
-
-        <fieldset>
-
-          <legend>Font family:</legend>
-
-          <div class="inputs-container" data-text-inputs-container="fontFamily">
-            <input type="file">
-          </div>
-
-        </fieldset>
-
-      </fieldset>
-
-      <fieldset data-outer-container="svg">
-
-        <legend>SVG:</legend>
-
-        <button data-button="crop-svg">CROP</button>
-        <button data-button="reset-svg">RESET</button>
-
-      </fieldset>
-
-      <fieldset data-outer-container="source">
-
-        <legend>Source:</legend>
-
-        <p id="readable-source-container"></p>
-
-      </fieldset>
+  
+      </div>
 
     </div>
 
   </main>
 
-  <ul>
-    <li>Pressing 'CROP' multiple times sometimes helps.</li>
-    <li>Text might get cut if it's longer than the path.</li>
-  </ul>
+  <aside>
+    <ul class="tips-list">
+      <li>Pressing 'CROP' multiple times sometimes helps.</li>
+      <li>Text might get cut if it's longer than the path.</li>
+    </ul>
+  </aside>
 
-  <footer class="the-footer">This is the footer.</footer>
+  <footer class="the-footer">Curved Text Generator™ <br> CurvedTextGeneratorStudios © 2022</footer>
 
 </body>
 

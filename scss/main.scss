@@ -83,6 +83,7 @@ input[type=number].sync-input {
 .the-main__svg-stretch {
   position: absolute;
   opacity: 0.8;
+  user-select: none;
 }
 
 .the-main__svg-stretch--bottom {

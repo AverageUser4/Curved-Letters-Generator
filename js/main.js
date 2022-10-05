@@ -106,8 +106,8 @@ class PathHandler {
 
   allFocusButtons = document.querySelectorAll('[data-button-focus]');
 
-  text = document.querySelector('text');
   path = document.querySelector('path');
+  text = document.querySelector('text');
 
   textAutoCenter = true;
   textXInputs = 
@@ -119,7 +119,20 @@ class PathHandler {
 
   constructor(theEventTarget, pointsObject) {
     this.points = pointsObject;
+
     this.eventTarget = theEventTarget;
+
+    this.eventTarget.addEventListener('movePath', (event) => {
+      this.movePath(event.actionParameters.textOffsetX, event.actionParameters.textOffsetY);
+    });
+
+    this.eventTarget.addEventListener('path', () => {
+      this.updatePath();
+    });
+
+    this.eventTarget.addEventListener('pointInputs', () => {
+      this.updatePath();
+    });
 
     this.resetPath();
 
@@ -200,16 +213,6 @@ class PathHandler {
 
   #addButtonListeners() {
     document.querySelector('[data-button="reset-path"]').addEventListener('click', () => this.resetPath());
-
-    /*
-      these should go to SVGHandler along with adjustSVGSize method
-    */
-    document.querySelector('[data-button="crop-svg"]').addEventListener('click', () => this.adjustSVGSize());
-    document.querySelector('[data-button="reset-svg"]').addEventListener('click', () => {
-      svg.setAttributeNS(null, 'viewBox', `0 0 500 500`);
-      svg.setAttributeNS(null, 'width', 500);
-      this.updatePointInputs();
-    });
 
     for(let val of this.allFocusButtons) {
       val.addEventListener('click', (event) => {
@@ -309,6 +312,95 @@ class PathHandler {
     this.eventTarget.dispatchEvent(new Event(updateName));
   }
 
+}
+
+class SVGHandler {
+
+  svg;
+
+  bottom;
+  right;
+  bottomRight;
+
+  resizeDirection = null;
+  initialMousePosition = { x: 0, y: 0 }
+
+  text = document.querySelector('text');
+
+  constructor(theEventTarget) {
+    this.eventTarget = theEventTarget;
+
+    this.svg = document.querySelector('svg');
+
+    this.bottom = document.querySelector('.the-main__svg-stretch--bottom');
+    this.right = document.querySelector('.the-main__svg-stretch--right');
+    this.bottomRight = document.querySelector('.the-main__svg-stretch--bottom-and-right');
+
+    document.querySelector('[data-button="crop-svg"]').addEventListener('click', () => this.adjustSVGSize());
+    document.querySelector('[data-button="reset-svg"]').addEventListener('click', () => {
+      svg.setAttributeNS(null, 'viewBox', `0 0 500 500`);
+      svg.setAttributeNS(null, 'width', 500);
+      svg.removeAttributeNS(null, 'height');
+      this.requestUpdate('pointInputs');
+    });
+
+    window.addEventListener('mousedown', (event) => {
+      if(event.button != 0)
+        return;
+
+      switch(event.target) {
+        case this.bottom:
+          this.resizeDirection = 'bottom';
+          break;
+
+        case this.right:
+          this.resizeDirection = 'right';
+          break;
+
+        case this.bottomRight:
+          this.resizeDirection = 'bottomRight';
+          break;
+
+        default:
+          return;
+      }
+
+      this.initialMousePosition.x = event.pageX;
+      this.initialMousePosition.y = event.pageY;
+    });
+
+    window.addEventListener('mouseup', () => this.resizeDirection = null);
+
+    window.addEventListener('mousemove', (event) => {
+      if(!this.resizeDirection)
+        return;
+
+      const svgRect = this.svg.getBoundingClientRect();
+      let newWidth = Math.round(event.pageX - svgRect.x);
+      newWidth = newWidth < 10 ? 10 : newWidth;
+      let newHeight = Math.round(event.pageY - svgRect.y);
+      newHeight = newHeight < 10 ? 10 : newHeight;
+
+      if(this.resizeDirection === 'bottom') {
+        this.svg.setAttributeNS(null, 'height', newHeight);
+        this.svg.setAttributeNS(null, 'viewBox', `0 0 ${svgRect.width} ${newHeight}`);
+      } else if(this.resizeDirection === 'right') {
+        this.svg.setAttributeNS(null, 'width', newWidth);
+        this.svg.setAttributeNS(null, 'viewBox', `0 0 ${newWidth} ${svgRect.height}`);
+      } else {
+        this.svg.setAttributeNS(null, 'width', newWidth);
+        this.svg.setAttributeNS(null, 'height', newHeight);
+        this.svg.setAttributeNS(null, 'viewBox', `0 0 ${newWidth} ${newHeight}`);
+      }
+    });
+  }
+
+  requestUpdate(updateName, actionParameters) {
+    const event = new Event(updateName);
+    event.actionParameters = actionParameters;
+    this.eventTarget.dispatchEvent(event);
+  }
+
   adjustSVGSize() {
     const svgRect = svg.getBoundingClientRect();
     const textRect = this.text.getBoundingClientRect();
@@ -322,27 +414,19 @@ class PathHandler {
     if(textRect.y > svgRect.y)
       textOffsetY *= -1;
 
-    this.movePath(textOffsetX, textOffsetY);
+    this.requestUpdate('movePath', { textOffsetX: textOffsetX, textOffsetY: textOffsetY });
 
     const w = textRect.width;
     const h = textRect.height;
     svg.setAttributeNS(null, 'viewBox', `0 0 ${w} ${h}`);
     svg.setAttributeNS(null, 'width', w);
 
-    this.updatePath();
     // this.updateText();
-    this.updatePointInputs();
+    // this.updatePointInputs();
 
     this.requestUpdate('text');
     this.requestUpdate('path');
-  }
-
-}
-
-class SVGHandler {
-
-  constructor(theEventTarget) {
-    this.eventTarget = theEventTarget;
+    this.requestUpdate('pointInputs');
   }
 
 }

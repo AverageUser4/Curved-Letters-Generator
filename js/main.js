@@ -1,3 +1,5 @@
+import nill from './scripts/setup.js';
+
 const svg = document.querySelector('svg');
 const readableSource = document.querySelector('.the-main__readable-source-container');
 
@@ -6,6 +8,10 @@ const pointBases = {
   cpx: 250, cpy: 100,
   epx: 490, epy: 250
 };
+
+const textInfoObject = {};
+const pointsObject = {};
+const theEventTarget = new EventTarget();
 
 function updateReadableSource() {
   let source = svg.outerHTML
@@ -23,100 +29,68 @@ function updateReadableSource() {
     );
 }
 
-(function randomiseId() {
-  const path = document.querySelector('[data-path]');
-  const textPath = document.querySelector('[data-text-path]');
-  const id = `ctg-text-path-${Math.random().toFixed(5)}`;
-  path.setAttributeNS(null, 'id', id);
-  textPath.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + id);
-})();
-
-(function syncAdjacentInput() {
-  for(let val of document.querySelectorAll('[data-number-and-range]'))
-    for(let val_2 of val.querySelectorAll('[type="number"], [type="range"]'))
-      val_2.addEventListener('input', (event) => {
-        const ct = event.currentTarget;
-        const value = ct.value;
-        
-        for(let val of ct.parentElement.querySelectorAll('input'))
-          val.value = value;
-      });
-})();
-
-
-
-
 class TextHandler {
 
-  font = {
-    textContent: 'My Curved Text :)',
-    size: 32,
-    x: 250,
-    anchor: 'middle',
-    family: null
-  };
+  textElement = document.querySelector('text');
+  textInfo;
 
-  constructor() {
-    this.text = document.querySelector('text');
+  constructor(theEventTarget, textInfoObject) {
+    this.eventTarget = theEventTarget;
+
+    this.textInfo = textInfoObject;
+    this.textInfo.textContent = 'My Curved Text :)';
+    this.textInfo.fontSize = 32;
+    this.textInfo.x = 250;
+    this.textInfo.textAnchor = 'middle';
 
     this.#addTextListeners();
     this.updateText();
   }
 
   #addTextListeners() {
-    const textContentInput = 
-    document.querySelector('[data-text-inputs-container="textContent"').children[0];
-
-    textContentInput.addEventListener('input', (event) => {
-      this.font.textContent = event.currentTarget.value;
-      this.updateText();
-    });
+    document.querySelector('[data-text-inputs-container="textContent"').children[0]
+      .addEventListener('input', (event) => {
+        this.textInfo.textContent = event.currentTarget.value;
+        this.updateText();
+      });
 
     const fontSizeInputs = 
       document.querySelector('[data-text-inputs-container="fontSize"')
       .querySelectorAll('input[type="number"], input[type="range"]');
 
     for(let val of fontSizeInputs) {
-      val.value = this.font.size;
+      val.value = this.textInfo.fontSize;
       val.addEventListener('input', () => {
-        this.font.size = val.value;
+        this.textInfo.fontSize = val.value;
         this.updateText();
       });
     }
 
-    this.textXInputs = 
+    const textXInputs = 
       document.querySelector('[data-text-inputs-container="textX"')
       .querySelectorAll('input[type="number"], input[type="range"]');
 
-    for(let val of this.textXInputs) {
-      val.value = this.font.x;
+    for(let val of textXInputs) {
+      val.value = this.textInfo.x;
       val.addEventListener('input', () => {
-        this.font.x = val.value;
+        this.textInfo.x = val.value;
         this.updateText();
       });
     }
-
-    const centerCheckbox = document.querySelector('[data-config="textCenter"]');
-    centerCheckbox.checked = true;
-
-    centerCheckbox.addEventListener('change', () => {
-      this.textAutoCenter = centerCheckbox.checked;
-    });
     
     const textAnchorSelect = document.querySelector('[data-input="textAnchor"');
     textAnchorSelect.selectedIndex = 0;
-
     textAnchorSelect.addEventListener('change', () => {
-      this.font.anchor = textAnchorSelect.value;
+      this.textInfo.textAnchor = textAnchorSelect.value;
       this.updateText();
     });
   }
 
   updateText() {
-    this.text.children[0].textContent = this.font.textContent;
-    this.text.style.fontSize = this.font.size + 'px';
-    this.text.setAttributeNS(null, 'x', this.font.x);
-    this.text.setAttributeNS(null, 'text-anchor', this.font.anchor);
+    this.textElement.children[0].textContent = this.textInfo.textContent;
+    this.textElement.style.fontSize = this.textInfo.fontSize + 'px';
+    this.textElement.setAttributeNS(null, 'x', this.textInfo.x);
+    this.textElement.setAttributeNS(null, 'text-anchor', this.textInfo.textAnchor);
 
     updateReadableSource();
   }
@@ -143,7 +117,10 @@ class PathHandler {
   pointInputs = document.querySelectorAll('[data-point-inputs-container]');
   points = {};
 
-  constructor() {
+  constructor(theEventTarget, pointsObject) {
+    this.points = pointsObject;
+    this.eventTarget = theEventTarget;
+
     this.resetPath();
 
     this.#addPathListeners();
@@ -152,6 +129,12 @@ class PathHandler {
     this.#addCircleListeners();
 
     updateReadableSource();
+
+    const centerCheckbox = document.querySelector('[data-config="textCenter"]');
+    centerCheckbox.checked = true;
+    centerCheckbox.addEventListener('change', () => {
+      this.textAutoCenter = centerCheckbox.checked;
+    });
   }
 
   updatePointInputs() {
@@ -313,6 +296,19 @@ class PathHandler {
     this.updatePath();
   }
 
+  movePath(offsetX, offsetY) {
+    for(let key in this.points) {
+      if(key.endsWith('PointX'))
+        this.points[key] += offsetX;
+      else if(key.endsWith('PointY'))
+        this.points[key] += offsetY
+    }
+  }
+
+  requestUpdate(updateName) {
+    this.eventTarget.dispatchEvent(new Event(updateName));
+  }
+
   adjustSVGSize() {
     const svgRect = svg.getBoundingClientRect();
     const textRect = this.text.getBoundingClientRect();
@@ -326,12 +322,7 @@ class PathHandler {
     if(textRect.y > svgRect.y)
       textOffsetY *= -1;
 
-    this.points.startPointX += textOffsetX;
-    this.points.controlPointX += textOffsetX;
-    this.points.endPointX += textOffsetX;
-    this.points.startPointY += textOffsetY;
-    this.points.controlPointY += textOffsetY;
-    this.points.endPointY += textOffsetY;
+    this.movePath(textOffsetX, textOffsetY);
 
     const w = textRect.width;
     const h = textRect.height;
@@ -341,29 +332,21 @@ class PathHandler {
     this.updatePath();
     // this.updateText();
     this.updatePointInputs();
+
+    this.requestUpdate('text');
+    this.requestUpdate('path');
   }
 
 }
 
-const pathHandler =  new PathHandler();
-const textHandle = new TextHandler();
+class SVGHandler {
 
-const styleSheet = new CSSStyleSheet();
-document.adoptedStyleSheets.push(styleSheet);
+  constructor(theEventTarget) {
+    this.eventTarget = theEventTarget;
+  }
 
-const f = document.querySelector('[type="file"]');
+}
 
-f.addEventListener('change', () => {
-  const reader = new FileReader();
-  reader.addEventListener('load', (event) => {
-    console.log(event.target.result);
-    styleSheet.insertRule(`
-      @font-face {
-        font-family: penis;
-        src: url(${event.target.result});
-      }
-    `);
-  });
-  reader.readAsDataURL(f.files[0]);
-  
-});
+const pathHandler =  new PathHandler(theEventTarget, pointsObject);
+const textHandler = new TextHandler(theEventTarget, textInfoObject);
+const svgHandler = new SVGHandler(theEventTarget);

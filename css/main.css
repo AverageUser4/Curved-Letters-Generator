@@ -2,7 +2,7 @@ body {
   margin: 0;
   background-color: #252525;
   color: #fff;
-  font-family: penis, sans-serif;
+  font-family: sans-serif;
 }
 
 button,
@@ -24,7 +24,7 @@ button:hover,
   filter: brightness(1.1);
 }
 
-fieldset {
+sa fieldset {
   border-radius: 5px;
   border-color: #aaa;
   color: #ddd;
@@ -34,8 +34,12 @@ legend {
   user-select: none;
 }
 
-.sync-input {
-  width: 90px;
+input[type=range].sync-input {
+  width: 125px;
+}
+
+input[type=number].sync-input {
+  width: 55px;
 }
 
 .bezier-circle {
@@ -74,6 +78,7 @@ legend {
 
 .the-main__svg-container {
   position: relative;
+  font-family: user-custom, sans-serif;
 }
 
 .the-main__svg-stretch {
@@ -135,7 +140,7 @@ legend {
 
 .the-main__outer-group-container--for-source {
   overflow: auto;
-  height: 80px;
+  height: 140px;
 }
 
 .the-main__inner-group-container {

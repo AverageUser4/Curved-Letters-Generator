@@ -21,7 +21,7 @@ button,
     cursor: pointer;
     filter: brightness(1.1);
   }
-}sa
+}
 
 fieldset {
   border-radius: 5px;
@@ -39,19 +39,6 @@ input[type=range].sync-input {
 
 input[type=number].sync-input {
   width: 55px;
-}
-
-.bezier-circle {
-  cursor: pointer;
-}
-
-.focus-button {
-  margin-bottom: 6px;
-  display: block;
-  width: 100%;
-}
-.focus-button--active {
-  background-color: hotpink;
 }
 
 .config-label {
@@ -138,8 +125,20 @@ input[type=number].sync-input {
   user-select: none;
 }
 
+.svg__path-and-text-group:hover {
+  cursor: grab;
+}
+.svg__path-and-text-group--grabbing:hover {
+  cursor: grabbing;
+}
+
+.svg__bezier-circle:hover {
+  cursor: pointer;
+}
+
 .the-main__controls-container {
   display: grid;
+  grid-template-columns: repeat(2, auto);
   gap: 8px;
 }
 
@@ -156,11 +155,25 @@ input[type=number].sync-input {
 }
 
 .the-main__inner-group-container {
-  display: grid;
+  display: flex;
   align-items: center;
   gap: 4px;
   padding: 4px 12px 10px;
   background-color: #151515;
+}
+
+.focus-button {
+  flex-grow: 0;
+  
+  padding: 6px;
+  display: block;
+}
+.focus-button--active {
+  background-color: hotpink;
+}
+
+.crosshair-icon {
+  display: block;
 }
 
 .the-main__inputs-container {
@@ -218,9 +231,9 @@ input[type=number].sync-input {
   border-top: 2px solid black;
 }
 
-@media(min-width: 1280px) {
-  .the-main__controls-container {
-    display: grid;
-    grid-template-columns: repeat(2, auto);
-  }
-}
+// @media(min-width: 1280px) {
+//   .the-main__controls-container {
+//     display: grid;
+//     grid-template-columns: repeat(2, auto);
+//   }
+// }

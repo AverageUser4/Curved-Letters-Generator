@@ -6,14 +6,19 @@ const pointBases = {
 
 export default class PathHandler {
 
+  initialMousePosition = { x: 0, y: 0 };
+  movingPath = false;
+
   svg = document.querySelector('svg');
   path = document.querySelector('path');
   text = document.querySelector('text');
 
-  focusedCircle = undefined;
-  startCircle = document.querySelector('[data-path-circle="start"]');
-  controlCircle = document.querySelector('[data-path-circle="control"]');
-  endCircle = document.querySelector('[data-path-circle="end"]');
+  focusedCircle = null;
+  circles = {
+    start: document.querySelector('[data-path-circle="start"]'),
+    control: document.querySelector('[data-path-circle="control"]'),
+    end: document.querySelector('[data-path-circle="end"]')
+  }
 
   allFocusButtons = Array.from(document.querySelectorAll('[data-button-focus]'));
 
@@ -34,6 +39,7 @@ export default class PathHandler {
     this.#addPathListeners();
     this.#addButtonListeners();
     this.#addCircleListeners();
+    this.#addPathMovementListeners();
 
     this.eventTarget.requestUpdate('readableSource');
   }
@@ -41,23 +47,35 @@ export default class PathHandler {
   #addCircleListeners() {
     const circles = Array.from(document.querySelectorAll('[data-path-circle]'));
 
-    window.addEventListener('click', (event) => {
-      if(
-          event.target === this.focusedCircle ||
-          !circles.includes(event.target)
-        ) {
-        this.focusedCircle = undefined;
-        for(let val of this.allFocusButtons)
-          val.classList.remove('focus-button--active');
-      } else {
-        this.focusedCircle = circles.find((val) => val === event.target);
-        if(!this.focusedCircle)
-          return;
+    for(let circle of circles) {
+      circle.addEventListener('mousedown', (event) => {
+        this.focusedCircle = event.currentTarget;
+      });
+    }
 
-        this.allFocusButtons.find((val) => val.getAttribute('data-button-focus') ===
-          this.focusedCircle.getAttributeNS(null, 'data-path-circle'))
-            ?.classList.add('focus-button--active');
-      }
+    // window.addEventListener('click', (event) => {
+    //   if(
+    //       event.target === this.focusedCircle ||
+    //       !circles.includes(event.target)
+    //     ) {
+    //     this.focusedCircle = null;
+    //     for(let val of this.allFocusButtons)
+    //       val.classList.remove('focus-button--active');
+    //   } else {
+    //     this.focusedCircle = circles.find((val) => val === event.target);
+    //     if(!this.focusedCircle)
+    //       return;
+
+    //     this.allFocusButtons.find((val) => val.getAttribute('data-button-focus') ===
+    //       this.focusedCircle.getAttributeNS(null, 'data-path-circle'))
+    //         ?.classList.add('focus-button--active');
+    //   }
+    // });
+
+    window.addEventListener('mouseup', () => {
+      this.focusedCircle = null;
+      for(let val of this.allFocusButtons)
+        val.classList.remove('focus-button--active');
     });
 
     window.addEventListener('mousemove', (event) => {
@@ -90,13 +108,13 @@ export default class PathHandler {
       for(let val of this.allFocusButtons)
         val.classList.remove('focus-button--active');
 
-      if(this.focusedCircle === this[`${which}Circle`]) {
-        this.focusedCircle = undefined;
+      if(this.focusedCircle === this.circles[which]) {
+        this.focusedCircle = null;
         return;
       }
 
       event.currentTarget.classList.add('focus-button--active');
-      this.focusedCircle = this[`${which}Circle`];
+      this.focusedCircle = this.circles[which];
 
       event.stopPropagation();
     }
@@ -127,6 +145,34 @@ export default class PathHandler {
     }
   }
 
+  #addPathMovementListeners() {
+    const group = document.querySelector('[data-path-move-group]');
+    
+    group.addEventListener('mousedown', (event) => {
+      this.initialMousePosition.x = event.clientX;
+      this.initialMousePosition.y = event.clientY;
+
+      this.movingPath = true;
+      group.classList.add('svg__path-and-text-group--grabbing');
+    });
+
+    window.addEventListener('mouseup', () => {
+      this.movingPath = false;
+      group.classList.remove('svg__path-and-text-group--grabbing');
+    });
+
+    window.addEventListener('mousemove', (event) => {
+      if(!this.movingPath)
+        return;
+
+      const offsetX = Math.round(event.clientX - this.initialMousePosition.x);
+      const offsetY = Math.round(event.clientY - this.initialMousePosition.y);
+      this.initialMousePosition.x = event.clientX;
+      this.initialMousePosition.y = event.clientY;
+      this.movePath(offsetX, offsetY);
+    });
+  }
+
   updatePointInputs() {
     for(let val of this.pointInputs)
       for (let val_2 of val.querySelectorAll('[type="range"], [type="number"]'))
@@ -134,12 +180,10 @@ export default class PathHandler {
   }
 
   updateCircles() {
-    this.startCircle.setAttributeNS(null, 'cx', this.points.startPointX);
-    this.startCircle.setAttributeNS(null, 'cy', this.points.startPointY);
-    this.controlCircle.setAttributeNS(null, 'cx', this.points.controlPointX);
-    this.controlCircle.setAttributeNS(null, 'cy', this.points.controlPointY);
-    this.endCircle.setAttributeNS(null, 'cx', this.points.endPointX);
-    this.endCircle.setAttributeNS(null, 'cy', this.points.endPointY);
+    for(let key in this.circles) {
+      this.circles[key].setAttributeNS(null, 'cx', this.points[`${key}PointX`]);
+      this.circles[key].setAttributeNS(null, 'cy', this.points[`${key}PointY`]);
+    }
   }
 
   updatePath() {
@@ -149,9 +193,9 @@ export default class PathHandler {
          ${this.points.endPointX},${this.points.endPointY}`
     );
 
-    this.eventTarget.requestUpdate('readableSource');
     this.updatePointInputs();
     this.updateCircles();
+    this.eventTarget.requestUpdate('readableSource');
   }
 
   resetPath() {

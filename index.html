@@ -21,9 +21,9 @@
       
       <div class="the-main__svg-container">
   
-        <div class="the-main__svg-stretch the-main__svg-stretch--bottom"></div>
-        <div class="the-main__svg-stretch the-main__svg-stretch--right"></div>
-        <div class="the-main__svg-stretch the-main__svg-stretch--bottom-and-right"></div>
+        <div data-svg-stretch="bottom" class="the-main__svg-stretch the-main__svg-stretch--bottom"></div>
+        <div data-svg-stretch="right" class="the-main__svg-stretch the-main__svg-stretch--right"></div>
+        <div data-svg-stretch="bottomRight" class="the-main__svg-stretch the-main__svg-stretch--bottom-and-right"></div>
 
         <svg
           class="the-main__svg"
@@ -31,17 +31,22 @@
           xmlns:xlink="http://www.w3.org/1999/xlink"
           viewBox="0 0 500 500"
           width="500"
+          height="500"
           >
       
-          <path data-path="1" id="ctg-text-path" stroke="red" fill="transparent"></path>
+          <g data-path-move-group="1" class="svg__path-and-text-group">
+
+            <path data-path="1" id="ctg-text-path" stroke="red" fill="transparent"></path>
+    
+            <text font-size="32">
+              <textPath data-text-path="1" xlink:href="#ctg-text-path"></textPath>
+            </text>
+
+          </g>
   
-          <text>
-            <textPath data-text-path="1" xlink:href="#ctg-text-path"></textPath>
-          </text>
-  
-          <circle class="bezier-circle" data-path-circle="start" cx="10" cy="250" r="7" fill="green"></circle>
-          <circle class="bezier-circle" data-path-circle="control" cx="250" cy="100" r="7" fill="green"></circle>
-          <circle class="bezier-circle" data-path-circle="end" cx="490" cy="250" r="7" fill="green"></circle>
+          <circle data-path-circle="start" class="svg__bezier-circle" cx="10" cy="250" r="7" fill="green"></circle>
+          <circle data-path-circle="control" class="svg__bezier-circle" cx="250" cy="100" r="7" fill="green"></circle>
+          <circle data-path-circle="end" class="svg__bezier-circle" cx="490" cy="250" r="7" fill="green"></circle>
   
         </svg>
   
@@ -57,18 +62,22 @@
   
             <legend>Start Point:</legend>
   
-            <button class="fancy-button focus-button" data-button-focus="start">Focus</button>
+            <button class="focus-button" data-button-focus="start"><img class="crosshair-icon" src="images/crosshair.svg"></button>
   
-            <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="startPointX">
-              <span class="inputs-container__span">X:</span>
-              <input class="sync-input" type="number" min="-1000" max="1000">
-              <input class="sync-input" type="range" min="-1000" max="1000">
-            </div>
-  
-            <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="startPointY">
-              <span class="inputs-container__span">Y:</span>
-              <input class="sync-input" type="number" min="-1000" max="1000">
-              <input class="sync-input" type="range" min="-1000" max="1000">
+            <div>
+
+              <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="startPointX">
+                <span class="inputs-container__span">x:</span>
+                <input class="sync-input" type="number" min="-1000" max="1000">
+                <input class="sync-input" type="range" min="-1000" max="1000">
+              </div>
+    
+              <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="startPointY">
+                <span class="inputs-container__span">y:</span>
+                <input class="sync-input" type="number" min="-1000" max="1000">
+                <input class="sync-input" type="range" min="-1000" max="1000">
+              </div>
+
             </div>
   
           </fieldset>
@@ -77,18 +86,22 @@
   
             <legend>Control Point:</legend>
   
-            <button class="fancy-button focus-button" data-button-focus="control">Focus</button>
+            <button class="focus-button" data-button-focus="control"><img class="crosshair-icon" src="images/crosshair.svg"></button>
   
-            <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="controlPointX">
-              <span class="inputs-container__span">X:</span>
-              <input class="sync-input" type="number" min="-1000" max="1000">
-              <input class="sync-input" type="range" min="-1000" max="1000">
-            </div>
-  
-            <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="controlPointY">
-              <span class="inputs-container__span">Y:</span>
-              <input class="sync-input" type="number" min="-1000" max="1000">
-              <input class="sync-input" type="range" min="-1000" max="1000">
+            <div>
+
+              <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="controlPointX">
+                <span class="inputs-container__span">x:</span>
+                <input class="sync-input" type="number" min="-1000" max="1000">
+                <input class="sync-input" type="range" min="-1000" max="1000">
+              </div>
+    
+              <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="controlPointY">
+                <span class="inputs-container__span">y:</span>
+                <input class="sync-input" type="number" min="-1000" max="1000">
+                <input class="sync-input" type="range" min="-1000" max="1000">
+              </div>
+
             </div>
   
           </fieldset>
@@ -97,18 +110,22 @@
   
             <legend>End Point:</legend>
   
-            <button class="fancy-button focus-button" data-button-focus="end">Focus</button>
+            <button class="focus-button" data-button-focus="end"><img class="crosshair-icon" src="images/crosshair.svg"></button>
   
-            <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="endPointX">
-              <span class="inputs-container__span">X:</span>
-              <input class="sync-input" type="number" min="-1000" max="1000">
-              <input class="sync-input" type="range" min="-1000" max="1000">
-            </div>
-  
-            <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="endPointY">
-              <span class="inputs-container__span">Y:</span>
-              <input class="sync-input" type="number" min="-1000" max="1000">
-              <input class="sync-input" type="range" min="-1000" max="1000">
+            <div>
+
+              <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="endPointX">
+                <span class="inputs-container__span">x:</span>
+                <input class="sync-input" type="number" min="-1000" max="1000">
+                <input class="sync-input" type="range" min="-1000" max="1000">
+              </div>
+    
+              <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="endPointY">
+                <span class="inputs-container__span">y:</span>
+                <input class="sync-input" type="number" min="-1000" max="1000">
+                <input class="sync-input" type="range" min="-1000" max="1000">
+              </div>
+
             </div>
   
           </fieldset>
@@ -133,41 +150,14 @@
   
           <fieldset class="the-main__inner-group-container">
   
-            <legend>Font-size:</legend>
-  
-            <div class="the-main__inputs-container" data-number-and-range="1" data-text-inputs-container="fontSize">
-              <input class="sync-input" type="number" min="1" max="256">
-              <input class="sync-input" type="range" min="1" max="256">
-            </div>
-  
-          </fieldset>
-  
-          <fieldset class="the-main__inner-group-container">
-  
-            <legend>X:</legend>
+            <legend>x:</legend>
   
             <div class="the-main__inputs-container" data-number-and-range="1" data-text-inputs-container="textX">
               <input class="sync-input" type="number" min="-1000" max="1000">
               <input class="sync-input" type="range" min="-1000" max="1000">
             </div>
   
-            <!-- <label class="config-label">Auto-adjust:<input data-config="textCenter" type="checkbox" checked></label> -->
-  
           </fieldset>
-  
-          <!-- <fieldset class="the-main__inner-group-container">
-  
-            <legend>Text anchor:</legend>
-  
-            <div class="the-main__inputs-container the-main__inputs-container--single" data-text-inputs-container="textAnchor">
-              <select class="single-input" data-input="textAnchor">
-                <option>middle</option>
-                <option>start</option>
-                <option>end</option>
-              </select>
-            </div>
-  
-          </fieldset> -->
   
           <fieldset class="the-main__inner-group-container">
   
@@ -175,6 +165,16 @@
   
             <div class="the-main__inputs-container" data-text-inputs-container="fontFamily">
               <input class="file-input" type="file">
+            </div>
+  
+          </fieldset>
+
+          <fieldset class="the-main__inner-group-container">
+  
+            <legend>Style:</legend>
+  
+            <div class="the-main__inputs-container" data-number-and-range="1" data-text-inputs-container="style">
+              <input class="ingle-input" type="text" placeholder="font-size, letter-spacing, fill, etc.">
             </div>
   
           </fieldset>
@@ -189,22 +189,25 @@
 
             <legend>Size:</legend>
 
-            <div class="the-main__inputs-container" data-number-and-range="1" data-svg-inputs-container="width">
-              <span class="inputs-container__span">W:</span>
-              <input class="sync-input" type="number" min="1" max="5000">
-              <input class="sync-input" type="range" min="1" max="5000">
-            </div>
-  
-            <div class="the-main__inputs-container" data-number-and-range="1" data-svg-inputs-container="height">
-              <span class="inputs-container__span">H:</span>
-              <input class="sync-input" type="number" min="1" max="5000">
-              <input class="sync-input" type="range" min="1" max="5000">
+            <button data-button="reset-svg">R</button>
+
+            <div>
+
+              <div class="the-main__inputs-container" data-number-and-range="1" data-svg-inputs-container="width">
+                <span class="inputs-container__span">w:</span>
+                <input data-svg-input="width" type="number" min="10" max="2000">
+              </div>
+    
+              <div class="the-main__inputs-container" data-number-and-range="1" data-svg-inputs-container="height">
+                <span class="inputs-container__span">h:</span>
+                <input data-svg-input="height" type="number" min="10" max="2000">
+              </div>
+
             </div>
 
           </fieldset>
 
-          <button class="fancy-button" data-button="crop-svg">CROP</button>
-          <button class="fancy-button" data-button="reset-svg">RESET</button>
+          <button data-button="crop-svg">CROP</button>
   
         </fieldset>
   
@@ -224,8 +227,9 @@
 
   <aside>
     <ul class="tips-list">
-      <li>Pressing 'CROP' multiple times sometimes helps.</li>
-      <li>Text might get cut if it's longer than the path.</li>
+      <li>Text will get cut if it's longer than the path.</li>
+      <li>Remember to crop the SVG before exporting it.</li>
+      <li>To change the color of the text use fill and stroke properties.</li>
     </ul>
   </aside>
 

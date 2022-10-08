@@ -34,12 +34,29 @@ const pathHandler =  new PathHandler(theEventTarget);
 const textHandler = new TextHandler(theEventTarget);
 const svgHandler = new SVGHandler(theEventTarget);
 
-/*
-  TextHandler -> text properties setters -> updateReadableSource()
+class UIPositionHandler {
 
-  SVGHandler -> reset-svg-button.click() -> updatePointInputs() & updateReadableSource()
-  SVGHandler -> cropSVG -> movePath()
+  eventTarget;
 
-  PathHandler -> constructor() -> updateReadableSource()
-  PathHandler -> updatePath() -> updateReadableSource()
-*/
+  svg = document.querySelector('svg');
+  controlsContainer = document.querySelector('.the-main__controls-container');
+
+  constructor(theEventTarget) {
+    this.eventTarget = theEventTarget;
+    this.eventTarget.addEventListener('adjustUIPosition', () => this.adjustUIPosition());
+
+    window.addEventListener('resize', () => this.adjustUIPosition());
+  }
+
+  adjustUIPosition() {
+    if(
+        this.svg.getBoundingClientRect().y < 
+        this.controlsContainer.getBoundingClientRect().y
+      ) {
+        this.controlsContainer.style.gridTemplateColumns = 'repeat(4, auto)';
+    }
+  }
+
+}
+
+const uiPositionHandler = new UIPositionHandler(theEventTarget);

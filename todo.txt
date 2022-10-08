@@ -3,3 +3,4 @@ is scrolled, the circle isn't synced up with the mouse
 - add way to apply inline styles to text
 - ability to move path's position with dragging
 - double click on circle or mouse down until mouse up to move it
+- (maybe) add support to more complex paths

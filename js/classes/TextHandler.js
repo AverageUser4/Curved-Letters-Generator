@@ -6,7 +6,7 @@ export default class TextHandler {
     textElement: null,
     eventTarget: null,
     _textContent: '',
-    _fontSize: 32,
+    _style: '',
     _x: 0,
 
     get textContent() {
@@ -18,12 +18,12 @@ export default class TextHandler {
       this.eventTarget.requestUpdate('readableSource');
     },
 
-    get fontSize() {
-      return this._fontSize;
+    get style() {
+      return this._style;
     },
-    set fontSize(value) {
-      this._fontSize = value;
-      this.textElement.style.fontSize = value + 'px';
+    set style(value) {
+      this._style = value;
+      this.textElement.style = value;
       this.eventTarget.requestUpdate('readableSource');
     },
 
@@ -44,7 +44,7 @@ export default class TextHandler {
     this.textInfo.textElement = this.textElement;
     this.textInfo.eventTarget = this.eventTarget;
     this.textInfo.textContent = 'My Curved Text :)';
-    this.textInfo.fontSize = 32;
+    this.textInfo.style = 'font-size: 32px;';
     this.textInfo.x = 0;
 
     this.#addTextListeners();
@@ -56,14 +56,10 @@ export default class TextHandler {
         this.textInfo.textContent = event.currentTarget.value;
       });
 
-    document.querySelector('[data-text-inputs-container="fontSize"')
-      .querySelectorAll('input[type="number"], input[type="range"]')
-      .forEach((val) => {
-        val.value = this.textInfo.fontSize;
-        val.addEventListener('input', () => {
-          this.textInfo.fontSize = val.value;
-        });
-      });
+    document.querySelector('[data-text-inputs-container="style"')
+      .querySelector('input[type="text"]')
+      .addEventListener('input', 
+        (event) => this.textInfo.style = event.currentTarget.value);
 
     document.querySelector('[data-text-inputs-container="textX"')
       .querySelectorAll('input[type="number"], input[type="range"]')

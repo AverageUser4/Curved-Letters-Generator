@@ -1,7 +1,7 @@
 const pointBases = {
-  spx: 10, spy: 250,
-  cpx: 250, cpy: 100,
-  epx: 490, epy: 250
+  startPointX: 10, startPointY: 250,
+  controlPointX: 250, controlPointY: 100,
+  endPointX: 490, endPointY: 250,
 };
 
 export default class PathHandler {
@@ -10,17 +10,12 @@ export default class PathHandler {
   path = document.querySelector('path');
   text = document.querySelector('text');
 
-  focusedCircle = null;
+  focusedCircle = undefined;
   startCircle = document.querySelector('[data-path-circle="start"]');
   controlCircle = document.querySelector('[data-path-circle="control"]');
   endCircle = document.querySelector('[data-path-circle="end"]');
 
-  allFocusButtons = document.querySelectorAll('[data-button-focus]');
-
-  textAutoAdjust = true;
-  textXInputs = 
-    document.querySelector('[data-text-inputs-container="textX"')
-    .querySelectorAll('input[type="number"], input[type="range"]');
+  allFocusButtons = Array.from(document.querySelectorAll('[data-button-focus]'));
 
   pointInputs = document.querySelectorAll('[data-point-inputs-container]');
   points = {};
@@ -44,24 +39,24 @@ export default class PathHandler {
   }
 
   #addCircleListeners() {
-    const circles = document.querySelectorAll('[data-path-circle]');
+    const circles = Array.from(document.querySelectorAll('[data-path-circle]'));
 
     window.addEventListener('click', (event) => {
-      for(let val of circles) {
-        if(val === this.focusedCircle) {
-          this.focusedCircle = null;
-          for(let val_2 of this.allFocusButtons)
-            val_2.classList.remove('focus-button--active');
-        }
-        else if(val === event.target) {
-          this.focusedCircle = val;
-          for(let val_2 of this.allFocusButtons)
-            if(
-                val_2.getAttribute('data-button-focus') === 
-                this.focusedCircle.getAttributeNS(null, 'data-path-circle')  
-              )
-            val_2.classList.add('focus-button--active');
-        }
+      if(
+          event.target === this.focusedCircle ||
+          !circles.includes(event.target)
+        ) {
+        this.focusedCircle = undefined;
+        for(let val of this.allFocusButtons)
+          val.classList.remove('focus-button--active');
+      } else {
+        this.focusedCircle = circles.find((val) => val === event.target);
+        if(!this.focusedCircle)
+          return;
+
+        this.allFocusButtons.find((val) => val.getAttribute('data-button-focus') ===
+          this.focusedCircle.getAttributeNS(null, 'data-path-circle'))
+            ?.classList.add('focus-button--active');
       }
     });
 
@@ -77,103 +72,59 @@ export default class PathHandler {
       this.focusedCircle.setAttributeNS(null, 'cx', x);
       this.focusedCircle.setAttributeNS(null, 'cy', y);
 
-      switch(this.focusedCircle.getAttributeNS(null, 'data-path-circle')) {
-        case 'start':
-          this.points.startPointX = x;
-          this.points.startPointY = y;
-          break;
-
-        case 'control':
-          this.points.controlPointX = x;
-          this.points.controlPointY = y;
-          break;
-
-        case 'end':
-          this.points.endPointX = x;
-          this.points.endPointY = y;
-          break;
-      }
+      const which = this.focusedCircle.getAttributeNS(null, 'data-path-circle');
+      this.points[`${which}PointX`] = x;
+      this.points[`${which}PointY`] = y;
 
       this.updatePath();
     });
   }
 
   #addButtonListeners() {
-    document.querySelector('[data-button="reset-path"]').addEventListener('click', () => this.resetPath());
+    document.querySelector('[data-button="reset-path"]')
+      .addEventListener('click', () => this.resetPath());
 
-    for(let val of this.allFocusButtons) {
-      val.addEventListener('click', (event) => {
-        const which = event.currentTarget.getAttribute('data-button-focus');
+    const focusButtonOnClick = (event) => {
+      const which = event.currentTarget.getAttribute('data-button-focus');
 
-        if(this.focusedCircle === this[`${which}Circle`]) {
-          event.currentTarget.classList.remove('focus-button--active');
-          this.focusedCircle = null;
-          return;
-        }
+      for(let val of this.allFocusButtons)
+        val.classList.remove('focus-button--active');
 
-        for(let val of this.allFocusButtons)
-          val.classList.remove('focus-button--active');
+      if(this.focusedCircle === this[`${which}Circle`]) {
+        this.focusedCircle = undefined;
+        return;
+      }
 
-        event.currentTarget.classList.add('focus-button--active');
+      event.currentTarget.classList.add('focus-button--active');
+      this.focusedCircle = this[`${which}Circle`];
 
-        this.focusedCircle = this[`${which}Circle`];
-
-        event.stopPropagation();
-      });
+      event.stopPropagation();
     }
 
-    const centerCheckbox = document.querySelector('[data-config="textCenter"]');
-    centerCheckbox.checked = true;
-    centerCheckbox.addEventListener('change', () => {
-      this.textAutoAdjust = centerCheckbox.checked;
-    });
+    for(let val of this.allFocusButtons)
+      val.addEventListener('click', (event) => focusButtonOnClick(event));
   }
 
   #addPathListeners() {
+    const onPathInputUpdate = (event) => {
+      const ct = event.currentTarget;
+      const parameter = ct.parentElement.getAttribute('data-point-inputs-container');
+      this.points[parameter] = Number(ct.value);
+
+      this.updatePath();
+    }
+
     const names = ['startPointX', 'startPointY', 
       'controlPointX', 'controlPointY', 'endPointX', 'endPointY'];
 
     for(let val of names) {
-      const inputContainer = 
-        document.querySelector(`[data-point-inputs-container="${val}"`);
-
-      const numberInput = inputContainer.querySelector('input[type="number"]');
-      const rangeInput = inputContainer.querySelector('input[type="range"]');
-
-      numberInput.value = rangeInput.value = this.points[val];
-
-      numberInput.addEventListener('input', (event) => this.onPathInputUpdate(event));
-      rangeInput.addEventListener('input', (event) => this.onPathInputUpdate(event));
+      document.querySelector(`[data-point-inputs-container="${val}"`)
+        .querySelectorAll('input[type="number"], input[type="range"]')
+        .forEach((input) => {
+          input.value = this.points[val];
+          input.addEventListener('input', (event) => onPathInputUpdate(event));
+        });
     }
-  }
-
-  resetPath() {
-    this.points.startPointX = pointBases.spx;
-    this.points.startPointY = pointBases.spy;
-    this.points.controlPointX = pointBases.cpx;
-    this.points.controlPointY = pointBases.cpy;
-    this.points.endPointX = pointBases.epx;
-    this.points.endPointY = pointBases.epy;
-
-    this.updatePath();
-  }
-
-  updatePath(dontAdjust = false) {
-    this.path.setAttributeNS(null, 'd', 
-      `M ${this.points.startPointX},${this.points.startPointY}
-       Q ${this.points.controlPointX},${this.points.controlPointY}
-         ${this.points.endPointX},${this.points.endPointY}`
-    );
-
-    if(!dontAdjust && this.textAutoAdjust) {
-      this.text.setAttributeNS(null, 'x', this.points.controlPointX);
-      for(let val of this.textXInputs)
-        val.value = this.points.controlPointX;
-    }
-
-    this.eventTarget.requestUpdate('readableSource');
-    this.updatePointInputs();
-    this.updateCircles();
   }
 
   updatePointInputs() {
@@ -191,12 +142,21 @@ export default class PathHandler {
     this.endCircle.setAttributeNS(null, 'cy', this.points.endPointY);
   }
 
-  onPathInputUpdate(event) {
-    const ct = event.currentTarget;
-    const value = ct.value;
+  updatePath() {
+    this.path.setAttributeNS(null, 'd', 
+      `M ${this.points.startPointX},${this.points.startPointY}
+       Q ${this.points.controlPointX},${this.points.controlPointY}
+         ${this.points.endPointX},${this.points.endPointY}`
+    );
 
-    const parameter = ct.parentElement.getAttribute('data-point-inputs-container');
-    this.points[parameter] = Number(value);
+    this.eventTarget.requestUpdate('readableSource');
+    this.updatePointInputs();
+    this.updateCircles();
+  }
+
+  resetPath() {
+    for(let key in pointBases)
+      this.points[key] = pointBases[key];
 
     this.updatePath();
   }
@@ -209,7 +169,7 @@ export default class PathHandler {
         this.points[key] += offsetY
     }
 
-    this.updatePath(true);
+    this.updatePath();
   }
 
 }

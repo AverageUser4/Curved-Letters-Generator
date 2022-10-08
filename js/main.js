@@ -33,3 +33,13 @@ theEventTarget.addEventListener('readableSource', () => {
 const pathHandler =  new PathHandler(theEventTarget);
 const textHandler = new TextHandler(theEventTarget);
 const svgHandler = new SVGHandler(theEventTarget);
+
+/*
+  TextHandler -> text properties setters -> updateReadableSource()
+
+  SVGHandler -> reset-svg-button.click() -> updatePointInputs() & updateReadableSource()
+  SVGHandler -> cropSVG -> movePath()
+
+  PathHandler -> constructor() -> updateReadableSource()
+  PathHandler -> updatePath() -> updateReadableSource()
+*/

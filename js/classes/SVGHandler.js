@@ -14,14 +14,22 @@ export default class SVGHandler {
   constructor(theEventTarget) {
     this.eventTarget = theEventTarget;
 
+    this.#addButtonListeners();
+    this.#addResizeListeners();
+  }
+
+  #addButtonListeners() {
     document.querySelector('[data-button="crop-svg"]').addEventListener('click', () => this.cropSVG());
     document.querySelector('[data-button="reset-svg"]').addEventListener('click', () => {
       this.svg.setAttributeNS(null, 'viewBox', `0 0 500 500`);
       this.svg.setAttributeNS(null, 'width', 500);
       this.svg.removeAttributeNS(null, 'height');
       this.eventTarget.requestUpdate('pointInputs');
+      this.eventTarget.requestUpdate('readableSource');
     });
+  }
 
+  #addResizeListeners() {
     window.addEventListener('mousedown', (event) => {
       if(event.button != 0)
         return;
@@ -88,13 +96,12 @@ export default class SVGHandler {
 
     this.eventTarget.requestUpdate('movePath', { textOffsetX: textOffsetX, textOffsetY: textOffsetY });
 
-    const w = textRect.width;
-    const h = textRect.height;
+    const w = Math.round(textRect.width);
+    const h = Math.round(textRect.height);
     this.svg.setAttributeNS(null, 'viewBox', `0 0 ${w} ${h}`);
     this.svg.setAttributeNS(null, 'width', w);
 
-    // this.eventTarget.requestUpdate('text');
-    // this.eventTarget.requestUpdate('path');
+    this.eventTarget.requestUpdate('readableSource');
   }
 
 }

@@ -20,7 +20,7 @@ export default null;
       });
 })();
 
-(function handleFontFamily() {
+(function addFontChangeListener() {
   const styleSheet = new CSSStyleSheet();
   document.adoptedStyleSheets.push(styleSheet);
   

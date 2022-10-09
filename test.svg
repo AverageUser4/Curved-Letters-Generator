@@ -1,0 +1,17 @@
+<svg  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 160 436" width="160" height="436">
+      
+          <g data-path-move-group="1" class="svg__path-and-text-group">
+
+            <path  id="ctg-text-path-0.38804"  fill="transparent" d="M 27,58
+       Q 222,-38
+         -9,462"></path>
+    
+            <text font-size="32" style="letter-spacing: 5px; font-size: 44px; fill: yellow;" x="0">
+              <textPath  xlink:href="#ctg-text-path-0.38804">My Curved Text :)</textPath>
+            </text>
+
+          </g>
+  
+          
+  
+        </svg>

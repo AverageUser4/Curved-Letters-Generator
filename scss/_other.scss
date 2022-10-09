@@ -1,0 +1,37 @@
+.the-main {
+  min-height: 100vh;
+}
+
+.the-main__content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+
+  padding: 24px;
+}
+
+.tips-list {
+  display: inline-grid;
+  gap: 8px;
+  
+  padding: 12px;
+  list-style-position: inside;
+  margin: 0 0 -2px 0;
+  background-color: #111;
+  border-top: 2px solid black;
+  border-right: 2px solid black;
+}
+
+.the-footer {
+  padding: 12px;
+  
+  line-height: 160%;
+  font-size: 12px;
+  text-align: center;
+  background-color: #111;
+
+  border-top: 2px solid black;
+}

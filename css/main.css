@@ -1,3 +1,13 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 body {
   margin: 0;
   background-color: #252525;
@@ -30,36 +40,28 @@ fieldset {
   color: #ddd;
 }
 
+input, textarea {
+  background-color: #111;
+  color: #ddd;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+}
+
+input[type=number] {
+  width: 36px;
+  padding: 4px;
+}
+
+input[type=text], textarea {
+  padding: 4px 8px;
+}
+
+input[type=file] {
+  border: none;
+}
+
 legend {
   user-select: none;
-}
-
-input[type=range].sync-input {
-  width: 125px;
-}
-
-input[type=number].sync-input {
-  width: 55px;
-}
-
-.config-label {
-  display: block;
-  text-align: right;
-  user-select: none;
-}
-
-.the-main {
-  min-height: 100vh;
-}
-
-.the-main__content {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  align-content: flex-start;
-  justify-content: space-between;
-  gap: 32px;
-  padding: 24px;
 }
 
 .the-main__svg-container {
@@ -134,8 +136,12 @@ input[type=number].sync-input {
 
 .the-main__outer-group-container {
   display: grid;
-  gap: 12px;
-  background-color: #111;
+  gap: 8px;
+  align-content: start;
+  padding: 8px;
+  background-color: #151515;
+  border: 2px solid #aaa;
+  border-radius: 5px;
 }
 
 .the-main__outer-group-container--for-source {
@@ -146,9 +152,9 @@ input[type=number].sync-input {
 .the-main__inner-group-container {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 12px 10px;
-  background-color: #151515;
+  justify-content: flex-start;
+  width: max-content;
+  gap: 12px;
 }
 
 .focus-button {
@@ -165,15 +171,9 @@ input[type=number].sync-input {
   display: block;
 }
 
-.the-main__inputs-container {
+.the-main__double-input-container {
   display: flex;
-  justify-content: center;
   gap: 12px;
-  width: 250px;
-}
-
-.the-main__inputs-container--single {
-  width: auto;
 }
 
 .single-input {
@@ -194,6 +194,20 @@ input[type=number].sync-input {
   margin: 0;
   width: 300px;
   word-wrap: break-word;
+}
+
+.the-main {
+  min-height: 100vh;
+}
+
+.the-main__content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 24px;
 }
 
 .tips-list {

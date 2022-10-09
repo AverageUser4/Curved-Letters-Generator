@@ -54,170 +54,210 @@
   
       <div class="the-main__controls-container">
   
-        <fieldset class="the-main__outer-group-container" data-outer-container="path">
+        <article class="the-main__outer-group-container" data-outer-container="path">
   
-          <legend>Path:</legend>
+          <section class="the-main__inner-group-container">
   
-          <fieldset class="the-main__inner-group-container">
+            <button class="focus-button" data-button-focus="start">P1</button>
   
-            <legend>Start Point:</legend>
-  
-            <button class="focus-button" data-button-focus="start"><img class="crosshair-icon" src="images/crosshair.svg"></button>
-  
-            <div>
+            <div class="the-main__double-input-container">
 
-              <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="startPointX">
-                <span class="inputs-container__span">x:</span>
-                <input class="sync-input" type="number" min="-1000" max="1000">
-                <input class="sync-input" type="range" min="-1000" max="1000">
+              <div data-number-and-range="1" data-point-inputs-container="startPointX">
+
+                <label>
+
+                  <span>x:</span>
+
+                  <input type="number" step="50" min="-1000" max="1000">
+
+                </label>
+
               </div>
     
-              <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="startPointY">
-                <span class="inputs-container__span">y:</span>
-                <input class="sync-input" type="number" min="-1000" max="1000">
-                <input class="sync-input" type="range" min="-1000" max="1000">
+              <div data-number-and-range="1" data-point-inputs-container="startPointY">
+
+                <label>
+
+                  <span>y:</span>
+
+                  <input type="number" step="50" min="-1000" max="1000">
+
+                </label>
+
               </div>
 
             </div>
   
-          </fieldset>
+          </section>
   
-          <fieldset class="the-main__inner-group-container">
+          <section class="the-main__inner-group-container">
   
-            <legend>Control Point:</legend>
+            <button class="focus-button" data-button-focus="control">P2</button>
   
-            <button class="focus-button" data-button-focus="control"><img class="crosshair-icon" src="images/crosshair.svg"></button>
-  
-            <div>
+            <div class="the-main__double-input-container">
 
-              <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="controlPointX">
-                <span class="inputs-container__span">x:</span>
-                <input class="sync-input" type="number" min="-1000" max="1000">
-                <input class="sync-input" type="range" min="-1000" max="1000">
+              <div data-number-and-range="1" data-point-inputs-container="controlPointX">
+
+                <label>
+
+                  <span>x:</span>
+
+                  <input type="number" step="50" min="-1000" max="1000">
+
+                </label>
+
               </div>
     
-              <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="controlPointY">
-                <span class="inputs-container__span">y:</span>
-                <input class="sync-input" type="number" min="-1000" max="1000">
-                <input class="sync-input" type="range" min="-1000" max="1000">
+              <div data-number-and-range="1" data-point-inputs-container="controlPointY">
+
+                <label>
+
+                  <span>y:</span>
+
+                  <input type="number" step="50" min="-1000" max="1000">
+
+                </label>
+
               </div>
 
             </div>
   
-          </fieldset>
+          </section>
   
-          <fieldset class="the-main__inner-group-container">
+          <section class="the-main__inner-group-container">
   
-            <legend>End Point:</legend>
+            <button class="focus-button" data-button-focus="end">P3</button>
   
-            <button class="focus-button" data-button-focus="end"><img class="crosshair-icon" src="images/crosshair.svg"></button>
-  
-            <div>
+            <div class="the-main__double-input-container">
 
-              <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="endPointX">
-                <span class="inputs-container__span">x:</span>
-                <input class="sync-input" type="number" min="-1000" max="1000">
-                <input class="sync-input" type="range" min="-1000" max="1000">
+              <div data-number-and-range="1" data-point-inputs-container="endPointX">
+
+                <label>
+
+                  <span>x:</span>
+
+                  <input type="number" step="50" min="-1000" max="1000">
+
+                </label>
+
               </div>
     
-              <div class="the-main__inputs-container" data-number-and-range="1" data-point-inputs-container="endPointY">
-                <span class="inputs-container__span">y:</span>
-                <input class="sync-input" type="number" min="-1000" max="1000">
-                <input class="sync-input" type="range" min="-1000" max="1000">
+              <div data-number-and-range="1" data-point-inputs-container="endPointY">
+
+                <label>
+
+                  <span>y:</span>
+
+                  <input type="number" step="50" min="-1000" max="1000">
+
+                </label>
+
               </div>
 
             </div>
   
-          </fieldset>
+          </section>
   
-          <button data-button="reset-path" class="reset-button">RESET</button>
+          <button data-button="reset-path">RESET</button>
   
-        </fieldset>
+        </article>
   
-        <fieldset class="the-main__outer-group-container" data-outer-container="text">
+        <article class="the-main__outer-group-container" data-outer-container="text">
   
-          <legend>Text:</legend>
+          <section class="the-main__inner-group-container">
   
-          <fieldset class="the-main__inner-group-container">
-  
-            <legend>Your text:</legend>
-  
-            <div class="the-main__inputs-container the-main__inputs-container--single" data-text-inputs-container="textContent">
+            <div data-text-inputs-container="textContent">
               <input class="single-input" type="text" value="My Curved Text :)">
             </div>
   
-          </fieldset>
+          </section>
   
-          <fieldset class="the-main__inner-group-container">
+          <section class="the-main__inner-group-container">
   
-            <legend>x:</legend>
-  
-            <div class="the-main__inputs-container" data-number-and-range="1" data-text-inputs-container="textX">
-              <input class="sync-input" type="number" min="-1000" max="1000">
-              <input class="sync-input" type="range" min="-1000" max="1000">
+            <div data-number-and-range="1" data-text-inputs-container="textX">
+
+              <label>
+                <span>x:</span>
+                <input type="number" step="50" min="-1000" max="1000">
+              </label>
+
+            </div>
+
+            <div data-number-and-range="1" data-text-inputs-container="textY">
+
+              <label>
+                <span>y:</span>
+                <input type="number" step="50" min="-1000" max="1000">
+              </label>
+
             </div>
   
-          </fieldset>
+          </section>
+
+          <section class="the-main__inner-group-container">
   
-          <fieldset class="the-main__inner-group-container">
+            <div data-number-and-range="1" data-text-inputs-container="style">
+              <textarea  class="ingle-input" type="text" placeholder="font-size, letter-spacing, fill, etc."></textarea>
+            </div>
   
-            <legend>Font family:</legend>
+          </section>
+
+          <section class="the-main__inner-group-container">
   
-            <div class="the-main__inputs-container" data-text-inputs-container="fontFamily">
+            <div data-text-inputs-container="fontFamily">
               <input class="file-input" type="file">
             </div>
   
-          </fieldset>
-
-          <fieldset class="the-main__inner-group-container">
+          </section>
   
-            <legend>Style:</legend>
+        </article>
   
-            <div class="the-main__inputs-container" data-number-and-range="1" data-text-inputs-container="style">
-              <input class="ingle-input" type="text" placeholder="font-size, letter-spacing, fill, etc.">
-            </div>
+        <article class="the-main__outer-group-container" data-outer-container="svg">
   
-          </fieldset>
-  
-        </fieldset>
-  
-        <fieldset class="the-main__outer-group-container" data-outer-container="svg">
-  
-          <legend>SVG:</legend>
-
-          <fieldset class="the-main__inner-group-container">
-
-            <legend>Size:</legend>
+          <section class="the-main__inner-group-container">
 
             <button data-button="reset-svg">R</button>
 
-            <div>
+            <div class="the-main__double-input-container">
 
-              <div class="the-main__inputs-container" data-number-and-range="1" data-svg-inputs-container="width">
-                <span class="inputs-container__span">w:</span>
-                <input data-svg-input="width" type="number" min="10" max="2000">
+              <div data-number-and-range="1" data-svg-inputs-container="width">
+
+                <label>
+
+                  <span>w:</span>
+
+                  <input data-svg-input="width" type="number" step="50" min="10" max="2000">
+
+                </label>
+
               </div>
     
-              <div class="the-main__inputs-container" data-number-and-range="1" data-svg-inputs-container="height">
-                <span class="inputs-container__span">h:</span>
-                <input data-svg-input="height" type="number" min="10" max="2000">
+              <div data-number-and-range="1" data-svg-inputs-container="height">
+
+                <label>
+
+                  <span>h:</span>
+
+                  <input data-svg-input="height" type="number" step="50" min="10" max="2000">
+
+                </label>
+
               </div>
 
             </div>
 
-          </fieldset>
+          </section>
 
           <button data-button="crop-svg">CROP</button>
+          <button data-button="copy-source">COPY SOURCE</button>
   
-        </fieldset>
+        </article>
   
-        <fieldset class="the-main__outer-group-container the-main__outer-group-container--for-source" data-outer-container="source">
-  
-          <legend>Source:</legend>
+        <!-- <article class="the-main__outer-group-container the-main__outer-group-container--for-source" data-outer-container="source">
   
           <p class="the-main__readable-source-container"></p>
   
-        </fieldset>
+        </article> -->
   
       </div>
 

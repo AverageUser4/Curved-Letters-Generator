@@ -40,8 +40,6 @@ export default class PathHandler {
     this.#addButtonListeners();
     this.#addCircleListeners();
     this.#addPathMovementListeners();
-
-    this.eventTarget.requestUpdate('readableSource');
   }
 
   #addCircleListeners() {
@@ -52,25 +50,6 @@ export default class PathHandler {
         this.focusedCircle = event.currentTarget;
       });
     }
-
-    // window.addEventListener('click', (event) => {
-    //   if(
-    //       event.target === this.focusedCircle ||
-    //       !circles.includes(event.target)
-    //     ) {
-    //     this.focusedCircle = null;
-    //     for(let val of this.allFocusButtons)
-    //       val.classList.remove('focus-button--active');
-    //   } else {
-    //     this.focusedCircle = circles.find((val) => val === event.target);
-    //     if(!this.focusedCircle)
-    //       return;
-
-    //     this.allFocusButtons.find((val) => val.getAttribute('data-button-focus') ===
-    //       this.focusedCircle.getAttributeNS(null, 'data-path-circle'))
-    //         ?.classList.add('focus-button--active');
-    //   }
-    // });
 
     window.addEventListener('mouseup', () => {
       this.focusedCircle = null;
@@ -195,7 +174,6 @@ export default class PathHandler {
 
     this.updatePointInputs();
     this.updateCircles();
-    this.eventTarget.requestUpdate('readableSource');
   }
 
   resetPath() {

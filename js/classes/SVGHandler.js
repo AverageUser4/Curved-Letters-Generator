@@ -1,6 +1,12 @@
+const svgInfoBases = {
+  width: 500,
+  height: 500
+};
+
 export default class SVGHandler {
 
   svg = document.querySelector('svg');
+  text = document.querySelector('text');
 
   bottom = document.querySelector('[data-svg-stretch="bottom"]');
   right = document.querySelector('[data-svg-stretch="right"]');
@@ -9,9 +15,7 @@ export default class SVGHandler {
   resizeDirection = null;
   latestMousePosition = { x: 0, y: 0 }
 
-  text = document.querySelector('text');
-
-  sizeInputs = document.querySelectorAll(['[data-svg-inputs-container]']);
+  sizeInputsContainer = document.querySelectorAll(['[data-svg-inputs-container]']);
 
   svgInfo = {
     width: 500,
@@ -26,29 +30,22 @@ export default class SVGHandler {
   }
 
   #addButtonListeners() {
-    document.querySelector('[data-button="crop-svg"]').addEventListener('click', () => this.cropSVG());
-    document.querySelector('[data-button="reset-svg"]').addEventListener('click', () => {
-      this.svg.setAttributeNS(null, 'viewBox', `0 0 500 500`);
-      this.svg.setAttributeNS(null, 'width', 500);
-      this.svg.setAttributeNS(null, 'height', 500);
-      // this.svg.removeAttributeNS(null, 'height');
-      this.eventTarget.requestUpdate('pointInputs');
-      this.eventTarget.requestUpdate('readableSource');
-      this.updateSizeInputs();
-    });
+    document.querySelector('[data-button="crop-svg"]').addEventListener('click', 
+      () => this.cropSVG());
+    document.querySelector('[data-button="reset-svg"]').addEventListener('click', 
+      () => this.changeSizeOfSVG(500, 500));
   }
 
   #addResizeListeners() {
     // input
-    const widthInput = document.querySelector(['[data-svg-input="width"]']);
-    const heightInput = document.querySelector(['[data-svg-input="height"]']);
-
-    widthInput.querySelectorAll('[type="range"], [type="number]"')
-      .forEach((input) => {
-        input.addEventListener('input', (event) => {
-          this.changeSizeOfSVG(widthInput.children[1].value, heightInput.children[1].value);
-        });
-      })
+    // for(let container of this.sizeInputsContainer) {
+    //   const input = container.querySelector('input[type="number"]');
+    //   const which = input.getAttribute('data-svg-input');
+    //   input.value = this.svgInfo[which];
+    //   input.addEventListener('input', () => {
+    //     this.changeSizeOfSVG(widthInput.value, heightInput.value);
+    //   });
+    // }
       
     // drag
     window.addEventListener('mousedown', (event) => {
@@ -68,8 +65,8 @@ export default class SVGHandler {
         return;
 
       const svgRect = this.svg.getBoundingClientRect();
-      let newWidth = Math.min(Math.max(Math.round(event.clientX - svgRect.x), 10), 2000);
-      let newHeight = Math.min(Math.max(Math.round(event.clientY - svgRect.y), 10), 2000);
+      let newWidth = event.clientX - svgRect.x;
+      let newHeight = event.clientY - svgRect.y;
 
       if(this.resizeDirection === 'bottom') {
         this.changeSizeOfSVG(svgRect.width, newHeight);
@@ -84,6 +81,9 @@ export default class SVGHandler {
   }
 
   changeSizeOfSVG(width, height) {
+    width = Math.min(Math.max(Math.round(width), 10), 2000);
+    height = Math.min(Math.max(Math.round(height), 10), 2000);
+
     this.svg.setAttributeNS(null, 'width', width);
     this.svg.setAttributeNS(null, 'height', height);
     this.svg.setAttributeNS(null, 'viewBox', `0 0 ${width} ${height}`);
@@ -113,15 +113,16 @@ export default class SVGHandler {
     this.svg.setAttributeNS(null, 'height', h);
 
     this.updateSizeInputs();
-    this.eventTarget.requestUpdate('readableSource');
     this.eventTarget.requestUpdate('adjustUIPosition');
   }
 
   updateSizeInputs() {
     const update = (input, which) => input.value = this.svg.getAttributeNS(null, which);
 
-    for(let container of this.sizeInputs)
-      container.querySelectorAll('[type="range"], [type="number"]')
-        .forEach((input) => update(input, container.getAttribute('data-svg-inputs-container')));
+    for(let container of this.sizeInputsContainer) {
+      const input = container.querySelector('[type="number"]');
+      update(input, input.getAttribute('data-svg-input'));
+    }
   }
+
 }

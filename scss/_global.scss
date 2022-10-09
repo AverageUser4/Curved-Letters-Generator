@@ -1,0 +1,64 @@
+// hide arrows in input[type=number]
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+body {
+  margin: 0;
+  background-color: #252525;
+  color: #fff;
+  font-family: sans-serif;
+}
+
+button, 
+.button-lookalike,
+::file-selector-button {
+  padding: 4px 12px;
+  font-size: 14px;
+  background-color: rgb(17, 101, 237);
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  text-transform: uppercase;
+
+  &:hover {
+    cursor: pointer;
+    filter: brightness(1.1);
+  }
+}
+
+fieldset {
+  border-radius: 5px;
+  border-color: #aaa;
+  color: #ddd;
+}
+
+input, textarea {
+  background-color: #111;
+  color: #ddd;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+}
+
+input[type=number] {
+  width: 36px;
+  padding: 4px;
+}
+
+input[type=text], textarea {
+  padding: 4px 8px;
+}
+
+input[type=file] {
+  border: none;
+}
+
+legend {
+  user-select: none;
+}

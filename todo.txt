@@ -1,9 +1,11 @@
-- when changing path with circles if the window
-is scrolled, the circle isn't synced up with the mouse
-- add way to apply inline styles to text
-- ability to move path's position with dragging
-- double click on circle or mouse down until mouse up to move it
 - (maybe) add support to more complex paths
+- in some places code still behaves like there were both number and range inputs
+- the state of the webpage should be saved
+
+- BIG UPDATE COMING SOON:
+  - by default there is no path
+  - user can choose between ellipsis, cubic and quadratic bezier
+  - if user chose a bezier they can add more points to make it longer (the same bezier)
 
   <svg width="320" height="320" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 

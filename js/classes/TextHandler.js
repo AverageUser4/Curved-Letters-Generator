@@ -1,36 +1,45 @@
 export default class TextHandler {
 
+  pathElement = document.querySelector('path');
   textElement = document.querySelector('text');
 
   constructor(theEventTarget) {
     this.eventTarget = theEventTarget;
 
     this.textElement.children[0].textContent = 'My Curved Text :)';
-    this.textElement.style = 'font-size: 32px;';
-    this.textElement.setAttributeNS(null, 'x', 0);
+    this.textElement.style = 'font-size: 24px;';
 
     this.#addTextListeners();
   }
 
   #addTextListeners() {
-    document.querySelector('[data-text-inputs-container="textContent"').children[0]
+    document.querySelector('[data-text-input="textContent"]')
       .addEventListener('input', (event) => {
         this.textElement.children[0].textContent = event.currentTarget.value;
       });
 
-    document.querySelector('[data-text-inputs-container="style"')
-      .querySelector('textarea')
+    document.querySelector('[data-text-input="style"]')
       .addEventListener('input', 
         (event) =>  this.textElement.style = event.currentTarget.value);
 
-    document.querySelector('[data-text-inputs-container="textX"')
-      .querySelectorAll('input[type="number"], input[type="range"]')
-      .forEach((input) => {
-        input.value = this.textElement.getAttributeNS(null, 'x');
-        input.addEventListener('input', (event) => {
-          this.textElement.setAttributeNS(null, 'x', event.currentTarget.value);
-        });
-      });
+    const inputX = document.querySelector('[data-text-input="x"]');
+    inputX.addEventListener('input', (event) => {
+      this.textElement.setAttributeNS(null, 'x', event.currentTarget.value);
+    });
+
+    // change x when scrolling over the path
+    const onWheel = (event) => {
+      event.preventDefault();
+
+      const currentX = Number(this.textElement.getAttributeNS(null, 'x'));
+      const movementAmount = event.wheelDeltaY > 0 ? 5 : -5;
+
+      this.textElement.setAttributeNS(null, 'x', currentX + movementAmount);
+    }
+
+    this.pathElement.addEventListener('wheel', (event) => onWheel(event), { passive: false });
+    // for some reason doesn't always fire when it's only on path
+    this.textElement.addEventListener('wheel', (event) => onWheel(event), { passive: false });
   }
 
 }

@@ -15,7 +15,7 @@ export default class SVGHandler {
   resizeDirection = null;
   latestMousePosition = { x: 0, y: 0 }
 
-  sizeInputsContainer = document.querySelectorAll(['[data-svg-inputs-container]']);
+  sizeInputs = document.querySelectorAll(['[data-svg-input]']);
 
   svgInfo = {
     width: 500,
@@ -119,10 +119,8 @@ export default class SVGHandler {
   updateSizeInputs() {
     const update = (input, which) => input.value = this.svg.getAttributeNS(null, which);
 
-    for(let container of this.sizeInputsContainer) {
-      const input = container.querySelector('[type="number"]');
+    for(let input of this.sizeInputs)
       update(input, input.getAttribute('data-svg-input'));
-    }
   }
 
 }

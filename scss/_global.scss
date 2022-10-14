@@ -15,6 +15,10 @@ body {
   font-family: sans-serif;
 }
 
+button {
+  display: block;
+}
+
 button, 
 .button-lookalike,
 ::file-selector-button {
@@ -61,4 +65,8 @@ input[type=file] {
 
 legend {
   user-select: none;
+}
+
+label {
+  display: block;
 }

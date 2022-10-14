@@ -15,6 +15,10 @@ body {
   font-family: sans-serif;
 }
 
+button {
+  display: block;
+}
+
 button,
 .button-lookalike,
 ::file-selector-button {
@@ -62,6 +66,10 @@ input[type=file] {
 
 legend {
   user-select: none;
+}
+
+label {
+  display: block;
 }
 
 .the-main__svg-container {
@@ -142,11 +150,6 @@ legend {
   background-color: #151515;
   border: 2px solid #aaa;
   border-radius: 5px;
-}
-
-.the-main__outer-group-container--for-source {
-  overflow: auto;
-  height: 140px;
 }
 
 .the-main__inner-group-container {

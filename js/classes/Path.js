@@ -4,35 +4,60 @@ const pointBases = {
   endPointX: 390, endPointY: 250,
 };
 
-export default class PathHandler {
+export default class Path {
 
-  svg = document.querySelector('svg');
-  pathElement = document.querySelector('path');
-  textElement = document.querySelector('text');
+  svgElement;
+  pathElement;
+  textElement;
+  textPathElement;
+  associatedUIElement;
+  groupElement;
 
-  pointInputs = document.querySelectorAll('[data-point-input]');
+  // ui interaction
+  pointInputs;
 
   // path movement
   initialMousePosition = { x: 0, y: 0 };
   movingPath = false;
   
   // points movement with dragging
-  allFocusButtons = Array.from(document.querySelectorAll('[data-focus-button]'));
+  allFocusButtons;
   focusedCircle = null;
-  circles = {
-    start: document.querySelector('[data-path-circle="start"]'),
-    control: document.querySelector('[data-path-circle="control"]'),
-    end: document.querySelector('[data-path-circle="end"]')
-  }
+  circles = [];
 
-  // stores bezier points positions
+  // stores points' positions
   points = {};
+  /*
+    new structure:
+    points.p1.x, points.p1.y, etc.
+  */
 
-  constructor(master) {
-    this.master = master;
+  constructor(theEventTarget, svg) {
+    this.eventTarget = theEventTarget;
 
-    this.textElement.children[0].textContent = 'My Curved Text :)';
+    this.eventTarget.addEventListener('movePath', (event) => {
+      this.movePath(event.actionParameters.textOffsetX, event.actionParameters.textOffsetY);
+    });
+    this.eventTarget.addEventListener('path', () => this.updatePath());
+    this.eventTarget.addEventListener('pointInputs', () => this.updatePointInputs());
+
+    // TODO: acutally add proper structure, nest these, etc.
+    this.svgElement = svg;
+    this.groupElement = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    this.pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    this.textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    this.textPathElement = document.createElementNS('http://www.w3.org/2000/svg', 'textPath');
+
+    this.textPathElement.textContent = 'My Curved Text :)';
     this.textElement.style = 'font-size: 24px;';
+
+    // testing....................
+    this.eventTarget.requestUpdate('addPathUI');
+    this.associatedUIElement = []; // TODO: add way to obtaine reference to newly created UI
+
+    this.associatedUIElement.querySelectorAll('[data-point-input]');
+    this.allFocusButtons = Array.from(this.associatedUIElement.querySelectorAll('[data-focus-button]'));
+    this.pointInputs = this.associatedUIElement.querySelectorAll('[data-point-input]');
 
     this.#addButtonListeners();
     this.#addCircleListeners();
@@ -44,22 +69,24 @@ export default class PathHandler {
   }
 
   #addTextListeners() {
-
-    document.querySelector('[data-text-input="size"]')
+    /*
+      DONE
+    */
+    this.associatedUIElement.querySelector('[data-text-input="size"]')
       .addEventListener('input', (event) => {
         this.textElement.style.fontSize = event.currentTarget.value + 'px';
       });
 
-    document.querySelector('[data-text-input="textContent"]')
+    this.associatedUIElement.querySelector('[data-text-input="textContent"]')
       .addEventListener('input', (event) => {
         this.textElement.children[0].textContent = event.currentTarget.value;
       });
 
-    document.querySelector('[data-text-input="style"]')
+    this.associatedUIElement.querySelector('[data-text-input="style"]')
       .addEventListener('input', 
         (event) =>  this.textElement.style = event.currentTarget.value);
 
-    const inputX = document.querySelector('[data-text-input="x"]');
+    const inputX = this.associatedUIElement.querySelector('[data-text-input="x"]');
     inputX.addEventListener('input', (event) => {
       this.textElement.setAttributeNS(null, 'x', event.currentTarget.value);
     });
@@ -80,8 +107,12 @@ export default class PathHandler {
   }
 
   #addButtonListeners() {
+    /*
+      DONE
+    */
+
     // resetting
-    document.querySelector('[data-button="reset-path"]')
+    this.associatedUIElement.querySelector('[data-button="reset-path"]')
       .addEventListener('click', () => this.resetPath());
 
     // focusing
@@ -107,7 +138,25 @@ export default class PathHandler {
   }
 
   #addCircleListeners() {
-    const circles = Array.from(document.querySelectorAll('[data-path-circle]'));
+    /*
+      - circles have to be created in this object
+      - circles have to have names likes c1, c2, c3, etc. - start, control, end isn't universal
+      - they need to be added to the svg
+    */
+
+    this.circles = [];
+
+    for(let i = 0; i < this.points.length; i++) {
+      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circle.classList.add('svg__bezier-circle');
+      circle.setAttributeNS(null, 'data-path-circle', `p${i + 1}`);
+      circle.setAttributeNS(null, 'cx', this.points[i].x);
+      circle.setAttributeNS(null, 'cy', this.points[i].y);
+      circle.setAttributeNS(null, 'r', 7);
+      circle.setAttributeNS(null, 'fill', 'green');
+
+      circles.push(circle);
+    }
 
     for(let circle of circles) {
       circle.addEventListener('mousedown', (event) => {
@@ -117,15 +166,15 @@ export default class PathHandler {
 
     window.addEventListener('mouseup', () => {
       this.focusedCircle = null;
-      for(let val of this.allFocusButtons)
-        val.classList.remove('focus-button--active');
+      for(let button of this.allFocusButtons)
+        button.classList.remove('focus-button--active');
     });
 
     window.addEventListener('mousemove', (event) => {
       if(!this.focusedCircle)
         return;
 
-      const svgRect = this.svg.getBoundingClientRect();
+      const svgRect = this.svgElement.getBoundingClientRect();
 
       const x = Math.round(event.clientX - svgRect.x);
       const y = Math.round(event.clientY - svgRect.y);
@@ -142,7 +191,6 @@ export default class PathHandler {
   }
 
   #addInputListeners() {
-    // number inputs
     const onPathInputUpdate = (event) => {
       const parameter = event.currentTarget.getAttribute('data-point-input');
 
@@ -151,32 +199,34 @@ export default class PathHandler {
       this.updatePath('input');
     }
 
-    const pointNames = ['startPointX', 'startPointY', 
-      'controlPointX', 'controlPointY', 'endPointX', 'endPointY'];
+    // need to decide on html's structure
+    for(let i = 0; i < this.points.length; i++) {
+      const input = document.querySelector(`[data-point-input="p${i + 1}"]`);
+      if(!input)
+        break;
 
-    for(let name of pointNames) {
-      const input = document.querySelector(`[data-point-input="${name}"]`);
-
-      input.value = this.points[name];
+      input.value = this.points[`p${i}`];
       input.addEventListener('input', (event) => onPathInputUpdate(event));
     }
   }
 
   #addPathMovementListeners() {
+    /*
+      DONE
+    */
+
     // drag and move
-    const group = document.querySelector('[data-path-move-group]');
-    
-    group.addEventListener('mousedown', (event) => {
+    this.group.addEventListener('mousedown', (event) => {
       this.initialMousePosition.x = event.clientX;
       this.initialMousePosition.y = event.clientY;
 
       this.movingPath = true;
-      group.classList.add('svg__path-and-text-group--grabbing');
+      this.group.classList.add('svg__path-and-text-group--grabbing');
     });
 
     window.addEventListener('mouseup', () => {
       this.movingPath = false;
-      group.classList.remove('svg__path-and-text-group--grabbing');
+      this.group.classList.remove('svg__path-and-text-group--grabbing');
     });
 
     window.addEventListener('mousemove', (event) => {
@@ -192,6 +242,9 @@ export default class PathHandler {
   }
 
   updatePointInputs() {
+    /*
+      DONE
+    */
     for(let input of this.pointInputs)
         input.value = this.points[input.getAttribute('data-point-input')];
   }
@@ -204,6 +257,7 @@ export default class PathHandler {
   }
 
   updatePath(invokedBy) {
+    // should be different on every class that inherits from this one
     let d = `M ${this.points.startPointX},${this.points.startPointY} `;
     d += `Q ${this.points.controlPointX},${this.points.controlPointY} `;
     d += `${this.points.endPointX},${this.points.endPointY} `;

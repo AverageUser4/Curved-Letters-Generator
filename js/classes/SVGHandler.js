@@ -22,8 +22,8 @@ export default class SVGHandler {
     height: 500,
   };
 
-  constructor(theEventTarget) {
-    this.eventTarget = theEventTarget;
+  constructor(master) {
+    this.master = master;
 
     this.#addButtonListeners();
     this.#addResizeListeners();
@@ -88,7 +88,7 @@ export default class SVGHandler {
     this.svg.setAttributeNS(null, 'height', height);
     this.svg.setAttributeNS(null, 'viewBox', `0 0 ${width} ${height}`);
 
-    this.eventTarget.requestUpdate('adjustUIPosition');
+    this.master.request('adjustUIPosition');
   }
 
   cropSVG() {
@@ -104,7 +104,7 @@ export default class SVGHandler {
     if(textRect.y > svgRect.y)
       textOffsetY *= -1;
 
-    this.eventTarget.requestUpdate('movePath', { textOffsetX: textOffsetX, textOffsetY: textOffsetY });
+    this.master.request('movePath', { textOffsetX: textOffsetX, textOffsetY: textOffsetY });
 
     const w = Math.round(textRect.width);
     const h = Math.round(textRect.height);
@@ -113,7 +113,7 @@ export default class SVGHandler {
     this.svg.setAttributeNS(null, 'height', h);
 
     this.updateSizeInputs();
-    this.eventTarget.requestUpdate('adjustUIPosition');
+    this.master.request('adjustUIPosition');
   }
 
   updateSizeInputs() {

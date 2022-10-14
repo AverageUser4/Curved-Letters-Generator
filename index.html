@@ -135,37 +135,36 @@
           </section>
   
           <button data-button="reset-path">RESET</button>
-  
-        </article>
-  
-        <article class="the-main__outer-group-container">
-  
-          <section class="the-main__inner-group-container">
-  
-              <input data-text-input="textContent" type="text" value="My Curved Text :)">
 
-          </section>
-  
-          <section class="the-main__inner-group-container">
-  
-            <label>
-              <span>x:</span>
-              <input data-text-input="x" type="number" step="50" min="-1000" max="1000">
-            </label>
+            <section class="the-main__inner-group-container">
+      
+              <textarea data-text-input="textContent">My Curved Text :)</textarea>
 
-          </section>
+            </section>
 
-          <section class="the-main__inner-group-container">
-  
-              <textarea data-text-input="style" type="text" placeholder="font-size, letter-spacing, fill, etc."></textarea>
-  
-          </section>
+            <section class="the-main__inner-group-container">
 
-          <section class="the-main__inner-group-container">
+              <div class="the-main__double-input-container">
+
+                <label>
+                  <span>x:</span>
+                  <input data-text-input="x" type="number" step="50" min="-1000" max="1000">
+                </label>
   
-              <input data-text-input="file" class="file-input" type="file">
-  
-          </section>
+                <label>
+                  <span>size:</span>
+                  <input data-text-input="size" type="number" step="4" min="1" max="600"></input>
+                </label>
+
+              </div>
+
+            </section>
+
+            <section class="the-main__inner-group-container">
+
+              <textarea data-text-input="style" placeholder="letter-spacing, fill, etc."></textarea>
+
+            </section>
   
         </article>
   
@@ -199,6 +198,20 @@
 
           <button data-button="crop-svg">CROP</button>
           <button data-button="copy-source">COPY SOURCE</button>
+
+          <section class="the-main__inner-group-container">
+
+            <input data-text-input="file" class="file-input" type="file">
+
+          </section>
+
+          <section>
+
+            <button>Add Q. Bezier</button>
+            <button>Add C. Bezier</button>
+            <button>Add Ellipsis</button>
+
+          </section>
   
         </article>
   

@@ -1,3 +1,5 @@
+import colorMaster from './ColorMaster.js';
+
 const pointBases = [
   { x: 100, y: 250 }, 
   { x: 245, y: 100 }, 
@@ -14,6 +16,9 @@ export default class Path {
   textPathElement;
   associatedUIElement;
   groupElement;
+
+  // for random colors of circles and paths
+  svgBackgroundColor;
 
   // ui interaction
   pointInputs = [];
@@ -38,6 +43,8 @@ export default class Path {
     this.master = master;
     this.svgElement = svg;
     this.index = index;
+
+    this.svgBackgroundColor = colorMaster.stringToObject(getComputedStyle(this.svgElement).backgroundColor);
 
     this.#setUpSVGElements();
     this.resetPath();
@@ -65,7 +72,8 @@ export default class Path {
     this.pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     this.pathElement.setAttributeNS(null, 'id', PathID);
     this.pathElement.setAttributeNS(null, 'fill', 'transparent');
-    this.pathElement.setAttributeNS(null, 'stroke', 'red');
+    this.pathElement.setAttributeNS(null, 'stroke', 
+      colorMaster.getContrastingColor(this.svgBackgroundColor, true));
 
     this.textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     this.textElement.setAttributeNS(null, 'font-size', '24px');
@@ -165,6 +173,8 @@ export default class Path {
       - circles have to have names likes c1, c2, c3, etc. - start, control, end isn't universal
       - they need to be added to the svg
     */
+   const circleColor = colorMaster.getContrastingColor(this.svgBackgroundColor, true);
+
     for(let i = 0; i < this.points.length; i++) {
       const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       circle.classList.add('svg__bezier-circle');
@@ -172,7 +182,7 @@ export default class Path {
       circle.setAttributeNS(null, 'cx', this.points[i].x);
       circle.setAttributeNS(null, 'cy', this.points[i].y);
       circle.setAttributeNS(null, 'r', 7);
-      circle.setAttributeNS(null, 'fill', 'green');
+      circle.setAttributeNS(null, 'fill', circleColor);
 
       this.circles.push(circle);
     }

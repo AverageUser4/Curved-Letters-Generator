@@ -13,7 +13,13 @@ export default class PathUIHandler {
     container.classList.add('path-ui');
 
     container.innerHTML += `
-      <h3>Path ${data.index}</h3>
+      <div style="display:flex; justify-content: space-between;">
+
+        <h3>Path ${data.index}</h3>
+
+        <button data-button="remove-path">X</button>
+
+      </div>
     `;
 
     const pointsList = document.createElement('ul');
@@ -23,18 +29,18 @@ export default class PathUIHandler {
       pointsList.innerHTML += `
         <li class="path-ui__point">
 
-          <button class="focus-button" data-focus-button="p${i + 1}">P${i + 1}</button>
+          <button class="focus-button" data-focus-button="${i}">P${i}</button>
 
           <div class="double-input-container">
       
             <label>
               <span>x:</span>
-              <input data-point-input="p${i + 1}x" type="number" value="${data.points[i].x}" step="50" min="-1000" max="1000">
+              <input data-point-input="${i}-x" type="number" value="${data.points[i].x}" step="50" min="-1000" max="1000">
             </label>
       
             <label>
               <span>y:</span>
-              <input data-point-input="p${i + 1}y" type="number" value="${data.points[i].y}" step="50" min="-1000" max="1000">
+              <input data-point-input="${i}-y" type="number" value="${data.points[i].y}" step="50" min="-1000" max="1000">
             </label>
       
           </div>
@@ -82,8 +88,9 @@ export default class PathUIHandler {
     this.controlsContainer.append(container);
   }
 
-  RemovePathUI(index) {
-    document.querySelector(`[data-path-ui="${index}"]`).remove();
+  removePathUI(data) {
+    console.log(data)
+    document.querySelector(`[data-path-ui="${data.index}"]`).remove();
   }
 
 }

@@ -3,8 +3,6 @@ import SVGHandler from './classes/SVGHandler.js';
 import PathHandler from './classes/PathHandler.js';
 import PathUIHandler from './classes/PathUIHandler.js';
 
-
-
 class Master {
 
   constructor() {
@@ -24,6 +22,10 @@ class Master {
 
       case 'removePathUI':
         this.pathUIHandler.removePathUI(data);
+        break;
+
+      case 'removeGroupElement':
+        this.pathHandler.removeGroupElement(data);
         break;
 
       // case 'movePath':

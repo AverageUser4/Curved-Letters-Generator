@@ -44,8 +44,19 @@ export default class PathHandler {
 
     this.allPaths.set(this.nextPathIndex, new Path(this.master, this.svgElement, this.nextPathIndex));
 
+    const buf = this.nextPathIndex;
+    document.querySelector(`[data-path-ui="${buf}"]`)
+      .querySelector('[data-button="remove-path"]')
+      .addEventListener('click', () => this.removePath(buf));
 
     this.nextPathIndex++;
+  }
+
+  removePath(index) {
+    this.allPaths.get(index).removeFromSVG();
+    this.allPaths.delete(index);
+
+    this.master.request('removePathUI', { index });
   }
 
 }

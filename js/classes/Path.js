@@ -1,8 +1,8 @@
-const pointBases = {
-  startPointX: 100, startPointY: 250,
-  controlPointX: 245, controlPointY: 100,
-  endPointX: 390, endPointY: 250,
-};
+const pointBases = [
+  { x: 100, y: 250 }, 
+  { x: 245, y: 100 }, 
+  { x: 390, y: 250 }, 
+];
 
 export default class Path {
 
@@ -16,7 +16,7 @@ export default class Path {
   groupElement;
 
   // ui interaction
-  pointInputs;
+  pointInputs = [];
 
   // path movement
   initialMousePosition = { x: 0, y: 0 };
@@ -40,14 +40,11 @@ export default class Path {
     this.index = index;
 
     this.#setUpSVGElements();
-
-    // temporary
-    this.points = [{x: 10, y: 10}, {x: 20, y: 20}, {x: 30, y: 30}];
+    this.resetPath();
 
     this.master.request('addPathUI', { index: this.index, points: this.points });
     this.associatedUIElement = document.querySelector(`[data-path-ui="${index}"]`);
 
-    this.associatedUIElement.querySelectorAll('[data-point-input]');
     this.allFocusButtons = Array.from(this.associatedUIElement.querySelectorAll('[data-focus-button]'));
     this.pointInputs = this.associatedUIElement.querySelectorAll('[data-point-input]');
 
@@ -57,7 +54,6 @@ export default class Path {
     this.#addPathMovementListeners();
     this.#addTextListeners();
 
-    this.resetPath();
   }
 
   #setUpSVGElements() {
@@ -137,10 +133,6 @@ export default class Path {
   }
 
   #addButtonListeners() {
-    /*
-      DONE
-    */
-
     // resetting
     this.associatedUIElement.querySelector('[data-button="reset-path"]')
       .addEventListener('click', () => this.resetPath());
@@ -176,7 +168,7 @@ export default class Path {
     for(let i = 0; i < this.points.length; i++) {
       const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       circle.classList.add('svg__bezier-circle');
-      circle.setAttributeNS(null, 'data-path-circle', `p${i + 1}`);
+      circle.setAttributeNS(null, 'data-path-circle', `${i}`);
       circle.setAttributeNS(null, 'cx', this.points[i].x);
       circle.setAttributeNS(null, 'cy', this.points[i].y);
       circle.setAttributeNS(null, 'r', 7);
@@ -185,8 +177,12 @@ export default class Path {
       this.circles.push(circle);
     }
 
+    this.groupElement.append(...this.circles);
+
     for(let circle of this.circles) {
       circle.addEventListener('mousedown', (event) => {
+        event.stopPropagation();
+
         this.focusedCircle = event.currentTarget;
       });
     }
@@ -209,31 +205,37 @@ export default class Path {
       this.focusedCircle.setAttributeNS(null, 'cx', x);
       this.focusedCircle.setAttributeNS(null, 'cy', y);
 
-      const which = this.focusedCircle.getAttributeNS(null, 'data-path-circle');
-      this.points[`${which}PointX`] = x;
-      this.points[`${which}PointY`] = y;
+      const which = parseInt(this.focusedCircle.getAttributeNS(null, 'data-path-circle'));
+      this.points[which].x = x;
+      this.points[which].y = y;
 
       this.updatePath('circle');
     });
   }
 
   #addInputListeners() {
+    /*
+      DONE
+    */
     const onPathInputUpdate = (event) => {
       const parameter = event.currentTarget.getAttribute('data-point-input');
+      
+      const indexAndAxis = parameter.split('-');
 
-      this.points[parameter] = Number(event.currentTarget.value);
+      this.points[indexAndAxis[0]][indexAndAxis[1]] = Number(event.currentTarget.value);
 
       this.updatePath('input');
     }
 
-    // need to decide on html's structure
     for(let i = 0; i < this.points.length; i++) {
-      const input = document.querySelector(`[data-point-input="p${i + 1}"]`);
-      if(!input)
-        break;
+      const inputX = this.associatedUIElement.querySelector(`[data-point-input="${i}-x"]`);
+      const inputY = this.associatedUIElement.querySelector(`[data-point-input="${i}-y"]`);
 
-      input.value = this.points[`p${i}`];
-      input.addEventListener('input', (event) => onPathInputUpdate(event));
+      inputX.value = this.points[i].x;
+      inputY.value = this.points[i].y;
+
+      inputX.addEventListener('input', (event) => onPathInputUpdate(event));
+      inputY.addEventListener('input', (event) => onPathInputUpdate(event));
     }
   }
 
@@ -272,22 +274,32 @@ export default class Path {
     /*
       DONE
     */
-    for(let input of this.pointInputs)
-        input.value = this.points[input.getAttribute('data-point-input')];
+    for(let input of this.pointInputs) {
+      const which = input.getAttribute('data-point-input');
+
+      if(which.endsWith('x')) {
+        input.value = this.points[parseInt(which)].x;
+      } else {
+        input.value = this.points[parseInt(which)].y;
+      }
+    }
   }
 
   updateCircles() {
-    for(let key in this.circles) {
-      this.circles[key].setAttributeNS(null, 'cx', this.points[`${key}PointX`]);
-      this.circles[key].setAttributeNS(null, 'cy', this.points[`${key}PointY`]);
+    /*
+      DONE
+    */
+    for(let i = 0; i < this.circles.length; i++) {
+      this.circles[i].setAttributeNS(null, 'cx', this.points[i].x);
+      this.circles[i].setAttributeNS(null, 'cy', this.points[i].y);
     }
   }
 
   updatePath(invokedBy) {
     // should be different on every class that inherits from this one
-    let d = `M ${this.points.startPointX},${this.points.startPointY} `;
-    d += `Q ${this.points.controlPointX},${this.points.controlPointY} `;
-    d += `${this.points.endPointX},${this.points.endPointY} `;
+    let d = `M ${this.points[0].x},${this.points[0].y} `;
+    d += `Q ${this.points[1].x},${this.points[1].y} `;
+    d += `${this.points[2].x},${this.points[2].y} `;
 
     this.pathElement.setAttributeNS(null, 'd', d);
 
@@ -298,21 +310,30 @@ export default class Path {
   }
 
   resetPath() {
-    for(let key in pointBases)
-      this.points[key] = pointBases[key];
+    /*
+      DONE
+    */
+    for(let i = 0; i < pointBases.length; i++)
+      this.points[i] = pointBases[i];
 
     this.updatePath();
   }
 
   movePath(offsetX, offsetY) {
-    for(let key in this.points) {
-      if(key.endsWith('PointX'))
-        this.points[key] += offsetX;
-      else if(key.endsWith('PointY'))
-        this.points[key] += offsetY
+    /*
+      DONE
+    */
+
+    for(let i = 0; i < this.points.length; i++) {
+      this.points[i].x += offsetX;
+      this.points[i].y += offsetY;
     }
 
     this.updatePath();
+  }
+
+  removeFromSVG() {
+    this.groupElement.remove();
   }
 
 }

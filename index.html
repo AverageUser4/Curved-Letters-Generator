@@ -17,16 +17,16 @@
 
   <main class="the-main">
 
-    <div class="the-main__content">
+    <div class="the-main-content">
       
-      <div class="the-main__svg-container">
+      <div class="svg-container">
   
-        <div class="the-main__svg-stretch the-main__svg-stretch--bottom" data-svg-stretch="bottom"></div>
-        <div class="the-main__svg-stretch the-main__svg-stretch--right" data-svg-stretch="right"></div>
-        <div class="the-main__svg-stretch the-main__svg-stretch--bottom-and-right" data-svg-stretch="bottomRight"></div>
+        <div class="svg-stretch svg-stretch--bottom" data-svg-stretch="bottom"></div>
+        <div class="svg-stretch svg-stretch--right" data-svg-stretch="right"></div>
+        <div class="svg-stretch svg-stretch--bottom-and-right" data-svg-stretch="bottomRight"></div>
 
         <svg
-          class="the-main__svg"
+          class="svg"
           xmlns="http://www.w3.org/2000/svg" 
           xmlns:xlink="http://www.w3.org/1999/xlink"
           viewBox="0 0 500 500"
@@ -44,137 +44,23 @@
 
           </g>
   
-          <circle class="svg__bezier-circle" data-path-circle="start" cx="10" cy="250" r="7" fill="green"></circle>
+          <!-- <circle class="svg__bezier-circle" data-path-circle="start" cx="10" cy="250" r="7" fill="green"></circle>
           <circle class="svg__bezier-circle" data-path-circle="control" cx="250" cy="100" r="7" fill="green"></circle>
-          <circle class="svg__bezier-circle" data-path-circle="end" cx="490" cy="250" r="7" fill="green"></circle>
+          <circle class="svg__bezier-circle" data-path-circle="end" cx="490" cy="250" r="7" fill="green"></circle> -->
   
         </svg>
   
       </div>
   
-      <div class="the-main__controls-container">
+      <div data-controls-container="1" class="controls-container">
   
-        <article class="the-main__outer-group-container">
+        <article class="outer-group-container">
   
-          <section class="the-main__inner-group-container">
-  
-            <button class="focus-button" data-focus-button="start">P1</button>
-  
-            <div class="the-main__double-input-container">
-
-              <label>
-
-                <span>x:</span>
-
-                <input data-point-input="startPointX" type="number" step="50" min="-1000" max="1000">
-
-              </label>
-
-              <label>
-
-                <span>y:</span>
-
-                <input data-point-input="startPointY" type="number" step="50" min="-1000" max="1000">
-
-              </label>
-
-            </div>
-  
-          </section>
-  
-          <section class="the-main__inner-group-container">
-  
-            <button class="focus-button" data-focus-button="control">P2</button>
-  
-            <div class="the-main__double-input-container">
-
-              <label>
-
-                <span>x:</span>
-
-                <input data-point-input="controlPointX" type="number" step="50" min="-1000" max="1000">
-
-              </label>
-
-              <label>
-
-                <span>y:</span>
-
-                <input data-point-input="controlPointY" type="number" step="50" min="-1000" max="1000">
-
-              </label>
-
-            </div>
-  
-          </section>
-  
-          <section class="the-main__inner-group-container">
-  
-            <button class="focus-button" data-focus-button="end">P3</button>
-  
-            <div class="the-main__double-input-container">
-
-              <label>
-
-                <span>x:</span>
-
-                <input data-point-input="endPointX" type="number" step="50" min="-1000" max="1000">
-
-              </label>
-
-              <label>
-
-                <span>y:</span>
-
-                <input data-point-input="endPointY" type="number" step="50" min="-1000" max="1000">
-
-              </label>
-
-            </div>
-  
-          </section>
-  
-          <button data-button="reset-path">RESET</button>
-
-            <section class="the-main__inner-group-container">
-      
-              <textarea data-text-input="textContent">My Curved Text :)</textarea>
-
-            </section>
-
-            <section class="the-main__inner-group-container">
-
-              <div class="the-main__double-input-container">
-
-                <label>
-                  <span>x:</span>
-                  <input data-text-input="x" type="number" step="50" min="-1000" max="1000">
-                </label>
-  
-                <label>
-                  <span>size:</span>
-                  <input data-text-input="size" type="number" step="4" min="1" max="600"></input>
-                </label>
-
-              </div>
-
-            </section>
-
-            <section class="the-main__inner-group-container">
-
-              <textarea data-text-input="style" placeholder="letter-spacing, fill, etc."></textarea>
-
-            </section>
-  
-        </article>
-  
-        <article class="the-main__outer-group-container">
-  
-          <section class="the-main__inner-group-container">
+          <section class="inner-group-container">
 
             <button data-button="reset-svg">R</button>
 
-            <div class="the-main__double-input-container">
+            <div class="double-input-container">
 
               <label>
 
@@ -199,7 +85,7 @@
           <button data-button="crop-svg">CROP</button>
           <button data-button="copy-source">COPY SOURCE</button>
 
-          <section class="the-main__inner-group-container">
+          <section class="inner-group-container">
 
             <input data-text-input="file" class="file-input" type="file">
 
@@ -207,14 +93,138 @@
 
           <section>
 
-            <button>Add Q. Bezier</button>
-            <button>Add C. Bezier</button>
-            <button>Add Ellipsis</button>
+            <button data-add-button="quadratic">Add Q. Bezier</button>
+            <button data-add-button="cubic">Add C. Bezier</button>
+            <button data-add-button="ellipsis">Add Ellipsis</button>
 
           </section>
   
         </article>
+
+        <!-- TESTING TESTING TESTING TESTING TESTING TESTING TESTING TESTING TESTING TESTING -->
+
+        <!-- <article class="path-ui" data-path-ui="1">
   
+          <h3 style="margin:0;">Path 1</h3>
+
+          <ul class="path-ui__points-list">
+
+            <li class="path-ui__point">
+    
+              <button class="focus-button" data-focus-button="p1">P1</button>
+    
+              <div class="double-input-container">
+  
+                <label>
+  
+                  <span>x:</span>
+  
+                  <input data-point-input="p1x" type="number" step="50" min="-1000" max="1000">
+  
+                </label>
+  
+                <label>
+  
+                  <span>y:</span>
+  
+                  <input data-point-input="p1y" type="number" step="50" min="-1000" max="1000">
+  
+                </label>
+  
+              </div>
+    
+            </li>
+    
+            <li class="path-ui__point">
+    
+              <button class="focus-button" data-focus-button="p2">P2</button>
+    
+              <div class="double-input-container">
+  
+                <label>
+  
+                  <span>x:</span>
+  
+                  <input data-point-input="p2x" type="number" step="50" min="-1000" max="1000">
+  
+                </label>
+  
+                <label>
+  
+                  <span>y:</span>
+  
+                  <input data-point-input="p2y" type="number" step="50" min="-1000" max="1000">
+  
+                </label>
+  
+              </div>
+    
+            </li>
+    
+            <li class="path-ui__point">
+    
+              <button class="focus-button" data-focus-button="p3">P3</button>
+    
+              <div class="double-input-container">
+  
+                <label>
+  
+                  <span>x:</span>
+  
+                  <input data-point-input="p3x" type="number" step="50" min="-1000" max="1000">
+  
+                </label>
+  
+                <label>
+  
+                  <span>y:</span>
+  
+                  <input data-point-input="p3y" type="number" step="50" min="-1000" max="1000">
+  
+                </label>
+  
+              </div>
+    
+            </li>
+
+          </ul>
+
+          <button data-button="reset-path">RESET</button>
+
+            <section class="inner-group-container">
+      
+              <textarea data-text-input="textContent">My Curved Text :)</textarea>
+
+            </section>
+
+            <section class="inner-group-container">
+
+              <div class="double-input-container">
+
+                <label>
+                  <span>x:</span>
+                  <input data-text-input="x" type="number" step="50" min="-1000" max="1000">
+                </label>
+  
+                <label>
+                  <span>size:</span>
+                  <input data-text-input="size" type="number" step="4" min="1" max="600"></input>
+                </label>
+
+              </div>
+
+            </section>
+
+            <section class="inner-group-container">
+
+              <textarea data-text-input="style" placeholder="letter-spacing, fill, etc."></textarea>
+
+            </section>
+  
+        </article> -->
+  
+        <!-- TESTING TESTING TESTING TESTING TESTING TESTING TESTING TESTING TESTING TESTING -->
+
       </div>
 
     </div>

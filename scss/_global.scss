@@ -50,6 +50,10 @@ input, textarea {
   border-radius: 5px;
 }
 
+textarea {
+  resize: vertical;
+}
+
 input[type=number] {
   width: 36px;
   padding: 4px;

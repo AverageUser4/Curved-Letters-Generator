@@ -1,15 +1,15 @@
-.the-main__svg-container {
+.svg-container {
   position: relative;
   font-family: user-custom, sans-serif;
 }
 
-.the-main__svg-stretch {
+.svg-stretch {
   position: absolute;
   opacity: 0.8;
   user-select: none;
 }
 
-.the-main__svg-stretch--bottom {
+.svg-stretch--bottom {
   bottom: -10px;
   left: 0;
 
@@ -23,7 +23,7 @@
   }
 }
 
-.the-main__svg-stretch--right {
+.svg-stretch--right {
   top: 0;
   right: -13px;
 
@@ -37,7 +37,7 @@
   }
 }
 
-.the-main__svg-stretch--bottom-and-right {
+.svg-stretch--bottom-and-right {
   bottom: -10px;
   right: -13px;
 
@@ -51,7 +51,7 @@
   }
 }
 
-.the-main__svg {
+.svg {
   position: relative;
 
   outline: 3px solid #000;

@@ -1,31 +1,42 @@
 import nill from './scripts/setup.js';
-import PathHandler from './classes/PathHandler.js';
 import SVGHandler from './classes/SVGHandler.js';
-import UIHandler from './classes/UIHandler.js';
+import PathHandler from './classes/PathHandler.js';
+import PathUIHandler from './classes/PathUIHandler.js';
 
 
 
 class Master {
 
   constructor() {
-    this.pathHandler =  new PathHandler(this);
     this.svgHandler = new SVGHandler(this);
-    // this.uiHandler = new UIHandler(this);
+    this.pathHandler =  new PathHandler(this, document.querySelector('svg'));
+    this.pathUIHandler = new PathUIHandler(this);
+
+    // this.pathUIHandler.addPathUI({ index: 0, points: [{ x: 10, y: 10}, {x: 20, y: 20}, {x: 30, y: 30}] });
+    this.pathHandler.addPath();
   }
 
-  request = (what, info) => {
+  request = (what, data) => {
     switch(what) {
-      case 'movePath':
-        this.pathHandler.movePath(info.textOffsetX, info.textOffsetY);
+      case 'addPathUI':
+        this.pathUIHandler.addPathUI(data);
         break;
 
-      case 'path':
-        this.pathHandler.updatePath();
+      case 'removePathUI':
+        this.pathUIHandler.removePathUI(data);
         break;
 
-      case 'pointInputs':
-        this.pathHandler.updatePointInputs();
-        break;
+      // case 'movePath':
+      //   this.pathHandler.movePath(data.textOffsetX, data.textOffsetY);
+      //   break;
+
+      // case 'path':
+      //   this.pathHandler.updatePath();
+      //   break;
+
+      // case 'pointInputs':
+      //   this.pathHandler.updatePointInputs();
+      //   break;
 
       default:
         console.error(`Unknown action requested in Master object - '${what}'.`);

@@ -1,10 +1,10 @@
-.the-main__controls-container {
+.controls-container {
   display: grid;
   grid-template-columns: repeat(2, auto);
   gap: 8px;
 }
 
-.the-main__outer-group-container {
+.outer-group-container {
   display: grid;
   gap: 8px;
   align-content: start;
@@ -16,7 +16,7 @@
   border-radius: 5px;
 }
 
-.the-main__inner-group-container {
+.inner-group-container {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -34,21 +34,6 @@
   background-color: hotpink;
 }
 
-.crosshair-icon {
-  display: block;
-}
-
-.the-main__double-input-container {
-  display: flex;
-  gap: 12px;
-}
-
-.single-input {
-  display: block;
-  font-size: 16px;
-  width: 90%;
-}
-
 .inputs-container__span {
   display: block;
   width: 30px;
@@ -57,14 +42,13 @@
   user-select: none;
 }
 
-.the-main__readable-source-container {
-  margin: 0;
-  width: 300px;
-  word-wrap: break-word;
+.double-input-container {
+  display: flex;
+  gap: 8px;
 }
 
 // @media(min-width: 1280px) {
-//   .the-main__controls-container {
+//   .controls-container {
 //     display: grid;
 //     grid-template-columns: repeat(2, auto);
 //   }

@@ -26,6 +26,7 @@ export default class Path {
   allFocusButtons;
   focusedCircle = null;
   circles = [];
+  circleNumbers = [];
 
   // stores points' positions
   pointBases;
@@ -186,10 +187,19 @@ export default class Path {
       circle.setAttributeNS(null, 'fill', this.color);
       circle.setAttributeNS(null, 'fill-opacity', 0.7);
 
+      const number = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      number.classList.add('svg__bezier-circle-number');
+      number.setAttributeNS(null, 'x', this.points[i].x - 3);
+      number.setAttributeNS(null, 'y', this.points[i].y + 4);
+      number.style.fontSize = '10px';
+      number.textContent = i;
+
       this.circles.push(circle);
+      this.circleNumbers.push(number);
     }
 
     this.groupElement.append(...this.circles);
+    this.groupElement.append(...this.circleNumbers);
 
     for(let circle of this.circles) {
       circle.addEventListener('mousedown', (event) => {
@@ -220,6 +230,9 @@ export default class Path {
       const which = parseInt(this.focusedCircle.getAttributeNS(null, 'data-path-circle'));
       this.points[which].x = x;
       this.points[which].y = y;
+
+      this.circleNumbers[which].setAttributeNS(null, 'x', this.points[which].x - 3);
+      this.circleNumbers[which].setAttributeNS(null, 'y', this.points[which].y + 4);
 
       this.updatePath('circle');
     });
@@ -291,6 +304,9 @@ export default class Path {
     for(let i = 0; i < this.circles.length; i++) {
       this.circles[i].setAttributeNS(null, 'cx', this.points[i].x);
       this.circles[i].setAttributeNS(null, 'cy', this.points[i].y);
+
+      this.circleNumbers[i].setAttributeNS(null, 'x', this.points[i].x - 3);
+      this.circleNumbers[i].setAttributeNS(null, 'y', this.points[i].y + 4);
     }
   }
 
@@ -299,7 +315,6 @@ export default class Path {
   }
 
   resetPath() {
-    console.log('resetting')
     for(let i = 0; i < this.pointBases.length; i++) {
       this.points[i] = {};
       this.points[i].x = this.pointBases[i].x;

@@ -1,23 +1,36 @@
 export default null;
 
 (function addFontChangeListener() {
-  const styleSheet = new CSSStyleSheet();
-  document.adoptedStyleSheets.push(styleSheet);
+  let fileName = '';
+
+  const baseStyleSheet = new CSSStyleSheet();
+  document.adoptedStyleSheets.push(baseStyleSheet);
   
-  const fileInput = document.querySelector('[data-text-input="file"]');
+  const fileInput = document.querySelector('[data-svg-input="file"]');
   const reader = new FileReader();
 
+  fileInput.addEventListener('change', () => {
+    fileName = fileInput.files[0].name;
+    reader.readAsDataURL(fileInput.files[0]);
+  });
+
   reader.addEventListener('load', (event) => {
-    styleSheet.replace(`
+    baseStyleSheet.replace(`
       @font-face {
         font-family: user-custom;
         src: url(${event.target.result});
       }
     `);
-  });
 
-  fileInput.addEventListener('change', () => {
-    reader.readAsDataURL(fileInput.files[0]);
+    const newStyleSheet = new CSSStyleSheet();
+    document.adoptedStyleSheets.push(newStyleSheet);
+
+    newStyleSheet.insertRule(`
+      @font-face {
+        font-family: '${fileName}';
+        src: url(${event.target.result});
+      }
+    `);
   });
 })()
 

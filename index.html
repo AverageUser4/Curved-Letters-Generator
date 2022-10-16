@@ -37,21 +37,17 @@
   
       </div>
   
-      <div data-svg-controls="1" class="controls-container">
+      <div data-svg-controls="1" class="svg-controls">
   
-        <article class="outer-group-container">
+        <article class="svg-ui">
   
-          <section class="inner-group-container">
-
-            <button data-button="reset-svg">R</button>
-
-            <div class="horizontal-flex">
+          <section class="horizontal-flex">
 
               <label class="inset-label">
 
                 <span>w:</span>
 
-                <input data-svg-input="width" type="number" step="50" min="10" max="2000">
+                <input data-svg-size-input="width" type="number" step="50" min="10" max="2000">
 
               </label>
 
@@ -59,31 +55,30 @@
 
                 <span>h:</span>
 
-                <input data-svg-input="height" type="number" step="50" min="10" max="2000">
+                <input data-svg-size-input="height" type="number" step="50" min="10" max="2000">
 
               </label>
 
-            </div>
-
           </section>
 
           <section class="horizontal-flex">
 
+            <button data-button="reset-svg">Reset</button>
             <button data-button="crop-svg">Crop</button>
-            <button data-button="copy-source">Copy Source</button>
+            <button data-button="copy-source">Save</button>
 
           </section>
 
           <section class="horizontal-flex">
 
-            <button data-add-button="quadratic">+ Q. Bezier</button>
-            <button data-add-button="cubic">+ C. Bezier</button>
-            <button data-add-button="ellipsis">+ Ellipsis</button>
+            <button data-add-button="quadratic">Q. Bezier</button>
+            <button data-add-button="cubic">C. Bezier</button>
+            <button data-add-button="ellipsis">Ellipsis</button>
 
           </section>
 
-          <input data-text-input="file" class="file-input" type="file">
-  
+          <input data-svg-input="file" class="file-input" type="file">
+
         </article>
 
       </div>
@@ -102,6 +97,7 @@
       <li>To change the color of the text use fill and stroke properties.</li>
       <li>Consider importing font family you are planning to use as it may get cropped due to different glyph sizes.</li>
       <li>When hovering over the path scroll your mouse wheel to change position of the text, if you press control font size will change.</li>
+      <li>You can use multiple font families at once. The newest one will be default for all paths, but you can change it with font-family property, eg. font-family: 'my-font.woff'. Remember to use quotes.</li>
     </ul>
   </aside>
 

@@ -44,7 +44,7 @@ export default class PathUIHandler {
 
     for(let i = 0; i < data.points.length; i++) {
       pointsList.innerHTML += `
-        <li class="path-ui__point">
+        <li class="path-ui__point" data-point-inputs-container="${i}">
 
           <button class="focus-button" data-focus-button="${i}">${i}</button>
 
@@ -83,12 +83,12 @@ export default class PathUIHandler {
       
             <label class="inset-label">
               <span>x:</span>
-              <input data-text-input="x" type="number" step="50" min="-1000" max="1000">
+              <input data-text-input="x" type="number" value="0" step="50" min="-1000" max="1000">
             </label>
       
             <label class="inset-label">
               <span>s:</span>
-              <input data-text-input="size" type="number" step="4" min="1" max="600"></input>
+              <input data-text-input="size" type="number" value="24" step="4" min="1" max="600"></input>
             </label>
       
           </div>
@@ -103,10 +103,37 @@ export default class PathUIHandler {
       `;
 
     this.controlsContainer.append(container);
+
+    // highlight path when mouse is on UI
+    container.addEventListener('mouseenter', () => {
+      document.querySelector(`[data-path-group="${data.index}"]`)
+        .classList.add('svg__path-and-text-group--active');
+    });
+
+    container.addEventListener('mouseleave', () => {
+      document.querySelector(`[data-path-group="${data.index}"]`)
+        .classList.remove('svg__path-and-text-group--active');
+    });
+
+    // highlight circle when mouse is on UI corresponding to it
+    const pointInputContainers = container.querySelectorAll('[data-point-inputs-container]');
+
+    for(let i = 0; i < pointInputContainers.length; i++) {
+      pointInputContainers[i].addEventListener('mouseenter', () => {
+        document.querySelector(`[data-path-group="${data.index}"]`)
+          .querySelector(`[data-path-circle="${i}"]`)
+          .classList.add('svg__bezier-circle--active');
+      });
+  
+      pointInputContainers[i].addEventListener('mouseleave', () => {
+        document.querySelector(`[data-path-group="${data.index}"]`)
+          .querySelector(`[data-path-circle="${i}"]`)
+          .classList.remove('svg__bezier-circle--active');
+      });
+    }
   }
 
   removePathUI(data) {
-    console.log(data)
     document.querySelector(`[data-path-ui="${data.index}"]`).remove();
   }
 

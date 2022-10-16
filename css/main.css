@@ -41,7 +41,7 @@ button:hover,
 input, textarea {
   background-color: #111;
   color: #ddd;
-  border: 1px solid #000;
+  border: 1px solid rgb(17, 101, 237);
 }
 
 textarea {
@@ -119,6 +119,13 @@ legend {
   cursor: grab;
 }
 
+.svg__path-and-text-group--active .svg__bezier-circle {
+  fill: red;
+}
+.svg__path-and-text-group--active path {
+  stroke: red;
+}
+
 .svg__path-and-text-group--grabbing:hover {
   cursor: grabbing;
 }
@@ -127,41 +134,12 @@ legend {
   cursor: pointer;
 }
 
-.controls-container {
-  display: grid;
-  grid-template-columns: repeat(2, auto);
-  gap: 8px;
+.svg__bezier-circle--active {
+  fill: gold !important;
 }
 
-.outer-group-container {
-  display: grid;
-  gap: 8px;
-  align-content: start;
-  padding: 8px;
-  background-color: #151515;
-  border: 2px solid #000;
-  border-radius: 5px;
-}
-
-.inner-group-container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: max-content;
-  gap: 12px;
-}
-
-.inputs-container__span {
-  display: block;
-  width: 30px;
-  flex-shrink: 0;
-  text-align: center;
-  user-select: none;
-}
-
-.double-input-container {
-  display: flex;
-  gap: 8px;
+.svg__bezier-circle-number {
+  pointer-events: none;
 }
 
 .the-main {
@@ -205,12 +183,13 @@ legend {
   gap: 8px;
 }
 .horizontal-flex > * {
-  flex-grow: 1;
+  flex: 1 1 0;
 }
 
 .path-controls {
   display: flex;
   justify-content: flex-start;
+  align-items: flex-start;
   gap: 16px;
   padding: 0 24px 24px;
   max-width: calc(100% - 24px);
@@ -245,11 +224,14 @@ legend {
 
 .path-ui__heading {
   margin: 0;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 130%;
+  color: #ddd;
+  user-select: none;
 }
 
 .path-ui__color-indicator {
+  flex: 0 0 11px;
   width: 11px;
   height: 11px;
   border-radius: 50%;
@@ -287,6 +269,8 @@ legend {
 
 .path-ui__text-area {
   width: 100%;
+  min-height: 20px;
+  max-height: 80px;
   box-sizing: border-box;
 }
 
@@ -299,6 +283,39 @@ legend {
 
 .focus-button--active {
   background-color: hotpink;
+}
+
+.svg-ui {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  width: 300px;
+  box-sizing: border-box;
+  padding: 8px;
+  background-color: #151515;
+  border: 2px solid #000;
+  border-radius: 5px;
+}
+
+.svg-ui__item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: max-content;
+  gap: 12px;
+}
+
+.inputs-container__span {
+  display: block;
+  width: 30px;
+  flex-shrink: 0;
+  text-align: center;
+  user-select: none;
+}
+
+.double-input-container {
+  display: flex;
+  gap: 8px;
 }
 
 .svg-ui__buttons {
@@ -316,6 +333,7 @@ legend {
   top: 0;
   left: 4px;
   font-size: 12px;
+  color: #ddd;
 }
 .inset-label > input {
   padding-left: 20px;

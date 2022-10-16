@@ -64,10 +64,27 @@
 .svg__path-and-text-group:hover {
   cursor: grab;
 }
+.svg__path-and-text-group--active {
+  .svg__bezier-circle {
+    fill: red;
+  }
+  path {
+    stroke: red;
+  }
+}
+
+
 .svg__path-and-text-group--grabbing:hover {
   cursor: grabbing;
 }
 
 .svg__bezier-circle:hover {
   cursor: pointer;
+}
+.svg__bezier-circle--active {
+  fill: gold !important;
+}
+
+.svg__bezier-circle-number {
+  pointer-events: none;
 }

@@ -14,7 +14,7 @@ export default class SVGHandler {
   resizeDirection = null;
   latestMousePosition = { x: 0, y: 0 }
 
-  sizeInputs = document.querySelectorAll(['[data-svg-input]']);
+  sizeInputs = document.querySelectorAll('[data-svg-size-input]');
 
   svgInfo = {
     width: 500,
@@ -26,6 +26,11 @@ export default class SVGHandler {
 
     this.#addButtonListeners();
     this.#addResizeListeners();
+
+    // prevent accidental scrolling when changing font size / text position with mouse wheel
+    this.svgElement.addEventListener('wheel', (event) => {
+      event.preventDefault();
+    }, { passive: false });
   }
 
   #addButtonListeners() {
@@ -37,14 +42,25 @@ export default class SVGHandler {
 
   #addResizeListeners() {
     // input
-    // for(let container of this.sizeInputsContainer) {
-    //   const input = container.querySelector('input[type="number"]');
-    //   const which = input.getAttribute('data-svg-input');
-    //   input.value = this.svgInfo[which];
-    //   input.addEventListener('input', () => {
-    //     this.changeSizeOfSVG(widthInput.value, heightInput.value);
-    //   });
-    // }
+    for(let input of this.sizeInputs) {
+      const which = input.getAttribute('data-svg-size-input');
+      input.value = this.svgInfo[which];
+
+      input.addEventListener('input', (event) => {
+        let w = 500;
+        let h = 500;
+
+        if(which === 'width') {
+          w = event.currentTarget.value;
+          h = this.svgElement.getBoundingClientRect().height;
+        } else {
+          w = this.svgElement.getBoundingClientRect().width;
+          h = event.currentTarget.value;
+        }
+        
+        this.changeSizeOfSVG(w, h)
+      });
+    }
       
     // drag
     window.addEventListener('mousedown', (event) => {
@@ -80,8 +96,13 @@ export default class SVGHandler {
   }
 
   changeSizeOfSVG(width, height) {
-    width = Math.min(Math.max(Math.round(width), 10), 2000);
-    height = Math.min(Math.max(Math.round(height), 10), 2000);
+    width = parseInt(width);
+    height = parseInt(height);
+
+    const scrollbarSize = innerWidth - document.body.clientWidth;
+
+    width = Math.min(Math.max(Math.round(width), 50), innerWidth - 48 - scrollbarSize);
+    height = Math.min(Math.max(Math.round(height), 50), innerHeight - 48 - scrollbarSize);
 
     this.svgElement.setAttributeNS(null, 'width', width);
     this.svgElement.setAttributeNS(null, 'height', height);
@@ -137,7 +158,7 @@ export default class SVGHandler {
     const update = (input, which) => input.value = this.svgElement.getAttributeNS(null, which);
 
     for(let input of this.sizeInputs)
-      update(input, input.getAttribute('data-svg-input'));
+      update(input, input.getAttribute('data-svg-size-input'));
   }
 
 }

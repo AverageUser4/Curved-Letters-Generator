@@ -33,26 +33,11 @@
           width="500"
           height="500"
           >
-      
-          <!-- <g class="svg__path-and-text-group" data-path-move-group="1">
-
-            <path data-path="1" id="ctg-0.00000" stroke="red" fill="transparent"></path>
-    
-            <text>
-              <textPath data-text-path="1" xlink:href="#ctg-0.00000"></textPath>
-            </text>
-
-          </g> -->
-  
-          <!-- <circle class="svg__bezier-circle" data-path-circle="start" cx="10" cy="250" r="7" fill="green"></circle>
-          <circle class="svg__bezier-circle" data-path-circle="control" cx="250" cy="100" r="7" fill="green"></circle>
-          <circle class="svg__bezier-circle" data-path-circle="end" cx="490" cy="250" r="7" fill="green"></circle> -->
-  
         </svg>
   
       </div>
   
-      <div data-controls-container="1" class="controls-container">
+      <div data-svg-controls="1" class="controls-container">
   
         <article class="outer-group-container">
   
@@ -60,9 +45,9 @@
 
             <button data-button="reset-svg">R</button>
 
-            <div class="double-input-container">
+            <div class="horizontal-flex">
 
-              <label>
+              <label class="inset-label">
 
                 <span>w:</span>
 
@@ -70,7 +55,7 @@
 
               </label>
 
-              <label>
+              <label class="inset-label">
 
                 <span>h:</span>
 
@@ -82,157 +67,36 @@
 
           </section>
 
-          <button data-button="crop-svg">CROP</button>
-          <button data-button="copy-source">COPY SOURCE</button>
+          <section class="horizontal-flex">
 
-          <section class="inner-group-container">
-
-            <input data-text-input="file" class="file-input" type="file">
+            <button data-button="crop-svg">Crop</button>
+            <button data-button="copy-source">Copy Source</button>
 
           </section>
 
-          <section>
+          <section class="horizontal-flex">
 
-            <button data-add-button="quadratic">Add Q. Bezier</button>
-            <button data-add-button="cubic">Add C. Bezier</button>
-            <button data-add-button="ellipsis">Add Ellipsis</button>
+            <button data-add-button="quadratic">+ Q. Bezier</button>
+            <button data-add-button="cubic">+ C. Bezier</button>
+            <button data-add-button="ellipsis">+ Ellipsis</button>
 
           </section>
+
+          <input data-text-input="file" class="file-input" type="file">
   
         </article>
-
-        <!-- TESTING TESTING TESTING TESTING TESTING TESTING TESTING TESTING TESTING TESTING -->
-
-        <!-- <article class="path-ui" data-path-ui="1">
-  
-          <h3 style="margin:0;">Path 1</h3>
-
-          <ul class="path-ui__points-list">
-
-            <li class="path-ui__point">
-    
-              <button class="focus-button" data-focus-button="p1">P1</button>
-    
-              <div class="double-input-container">
-  
-                <label>
-  
-                  <span>x:</span>
-  
-                  <input data-point-input="p1x" type="number" step="50" min="-1000" max="1000">
-  
-                </label>
-  
-                <label>
-  
-                  <span>y:</span>
-  
-                  <input data-point-input="p1y" type="number" step="50" min="-1000" max="1000">
-  
-                </label>
-  
-              </div>
-    
-            </li>
-    
-            <li class="path-ui__point">
-    
-              <button class="focus-button" data-focus-button="p2">P2</button>
-    
-              <div class="double-input-container">
-  
-                <label>
-  
-                  <span>x:</span>
-  
-                  <input data-point-input="p2x" type="number" step="50" min="-1000" max="1000">
-  
-                </label>
-  
-                <label>
-  
-                  <span>y:</span>
-  
-                  <input data-point-input="p2y" type="number" step="50" min="-1000" max="1000">
-  
-                </label>
-  
-              </div>
-    
-            </li>
-    
-            <li class="path-ui__point">
-    
-              <button class="focus-button" data-focus-button="p3">P3</button>
-    
-              <div class="double-input-container">
-  
-                <label>
-  
-                  <span>x:</span>
-  
-                  <input data-point-input="p3x" type="number" step="50" min="-1000" max="1000">
-  
-                </label>
-  
-                <label>
-  
-                  <span>y:</span>
-  
-                  <input data-point-input="p3y" type="number" step="50" min="-1000" max="1000">
-  
-                </label>
-  
-              </div>
-    
-            </li>
-
-          </ul>
-
-          <button data-button="reset-path">RESET</button>
-
-            <section class="inner-group-container">
-      
-              <textarea data-text-input="textContent">My Curved Text :)</textarea>
-
-            </section>
-
-            <section class="inner-group-container">
-
-              <div class="double-input-container">
-
-                <label>
-                  <span>x:</span>
-                  <input data-text-input="x" type="number" step="50" min="-1000" max="1000">
-                </label>
-  
-                <label>
-                  <span>size:</span>
-                  <input data-text-input="size" type="number" step="4" min="1" max="600"></input>
-                </label>
-
-              </div>
-
-            </section>
-
-            <section class="inner-group-container">
-
-              <textarea data-text-input="style" placeholder="letter-spacing, fill, etc."></textarea>
-
-            </section>
-  
-        </article> -->
-  
-        <!-- TESTING TESTING TESTING TESTING TESTING TESTING TESTING TESTING TESTING TESTING -->
 
       </div>
 
     </div>
 
+    <div class="path-controls" data-path-controls="1"></div>
+
   </main>
 
   <aside>
     <ul class="tips-list">
+      <li>Generated text will be black, unless you specify fill color in style.</li>
       <li>Text will get cut if it's longer than the path.</li>
       <li>Remember to crop the SVG before exporting it.</li>
       <li>To change the color of the text use fill and stroke properties.</li>

@@ -1,3 +1,5 @@
+@use 'var';
+
 // hide arrows in input[type=number]
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -23,11 +25,11 @@ button,
 .button-lookalike,
 ::file-selector-button {
   padding: 4px 12px;
-  font-size: 14px;
+  font-size: 12px;
   background-color: rgb(17, 101, 237);
   color: rgb(255, 255, 255);
   border: none;
-  border-radius: 5px;
+  border: 1px solid black;
   font-weight: bold;
   text-transform: uppercase;
 
@@ -37,17 +39,10 @@ button,
   }
 }
 
-fieldset {
-  border-radius: 5px;
-  border-color: #aaa;
-  color: #ddd;
-}
-
 input, textarea {
   background-color: #111;
   color: #ddd;
-  border: 1px solid #aaa;
-  border-radius: 5px;
+  border: 1px solid var.$ui-border-color;
 }
 
 textarea {
@@ -55,7 +50,8 @@ textarea {
 }
 
 input[type=number] {
-  width: 36px;
+  width: 100%;
+  box-sizing: border-box;
   padding: 4px;
 }
 
@@ -69,8 +65,4 @@ input[type=file] {
 
 legend {
   user-select: none;
-}
-
-label {
-  display: block;
 }

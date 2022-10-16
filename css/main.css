@@ -23,11 +23,11 @@ button,
 .button-lookalike,
 ::file-selector-button {
   padding: 4px 12px;
-  font-size: 14px;
+  font-size: 12px;
   background-color: rgb(17, 101, 237);
   color: rgb(255, 255, 255);
   border: none;
-  border-radius: 5px;
+  border: 1px solid black;
   font-weight: bold;
   text-transform: uppercase;
 }
@@ -38,17 +38,10 @@ button:hover,
   filter: brightness(1.1);
 }
 
-fieldset {
-  border-radius: 5px;
-  border-color: #aaa;
-  color: #ddd;
-}
-
 input, textarea {
   background-color: #111;
   color: #ddd;
-  border: 1px solid #aaa;
-  border-radius: 5px;
+  border: 1px solid #000;
 }
 
 textarea {
@@ -56,7 +49,8 @@ textarea {
 }
 
 input[type=number] {
-  width: 36px;
+  width: 100%;
+  box-sizing: border-box;
   padding: 4px;
 }
 
@@ -70,10 +64,6 @@ input[type=file] {
 
 legend {
   user-select: none;
-}
-
-label {
-  display: block;
 }
 
 .svg-container {
@@ -120,7 +110,7 @@ label {
 .svg {
   position: relative;
   outline: 3px solid #000;
-  background-color: #393939;
+  background-color: #2a2a2a;
   border-radius: 5px;
   user-select: none;
 }
@@ -149,7 +139,7 @@ label {
   align-content: start;
   padding: 8px;
   background-color: #151515;
-  border: 2px solid #aaa;
+  border: 2px solid #000;
   border-radius: 5px;
 }
 
@@ -159,16 +149,6 @@ label {
   justify-content: flex-start;
   width: max-content;
   gap: 12px;
-}
-
-.focus-button {
-  flex-grow: 0;
-  padding: 6px;
-  display: block;
-}
-
-.focus-button--active {
-  background-color: hotpink;
 }
 
 .inputs-container__span {
@@ -219,25 +199,126 @@ label {
   border-top: 2px solid black;
 }
 
+.horizontal-flex {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.horizontal-flex > * {
+  flex-grow: 1;
+}
+
+.path-controls {
+  display: flex;
+  justify-content: flex-start;
+  gap: 16px;
+  padding: 0 24px 24px;
+  max-width: calc(100% - 24px);
+  overflow: auto;
+}
+
 .path-ui {
+  display: grid;
+  gap: 8px;
+  flex-shrink: 0;
+  width: 200px;
+  padding-bottom: 4px;
   background-color: #151515;
-  border: 2px solid #aaa;
+  border: 2px solid #000;
   border-radius: 5px;
 }
-.path-ui h3 {
+
+.path-ui__top {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0 0 4px;
+  position: relative;
+}
+
+.path-ui__remove-path-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 0 3px 0 3px;
+  background-color: rgb(176, 50, 40);
+}
+
+.path-ui__heading {
   margin: 0;
+  font-size: 16px;
+  line-height: 130%;
+}
+
+.path-ui__color-indicator {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
 }
 
 .path-ui__points-list {
+  display: grid;
+  gap: 6px;
   margin: 0;
-  padding: 0;
-  border: 1px solid #aaa;
+  padding: 6px 4px;
+  max-height: 100px;
+  overflow: auto;
+  border: 1px solid #000;
+  border-left: none;
+  border-right: none;
   list-style: none;
 }
 
 .path-ui__point {
   display: flex;
+  justify-content: center;
   gap: 8px;
+}
+.path-ui__point > * {
+  flex-grow: 1;
+}
+
+.path-ui__inputs-container {
+  padding: 0 4px;
+}
+
+.path-ui__text-area-container {
+  padding: 0 4px;
+}
+
+.path-ui__text-area {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.focus-button {
+  flex-grow: 0;
+  display: block;
+  padding: 1px 8px;
+  font-size: 12px;
+}
+
+.focus-button--active {
+  background-color: hotpink;
+}
+
+.svg-ui__buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.inset-label {
+  position: relative;
+  display: block;
+}
+.inset-label > span {
+  position: absolute;
+  top: 0;
+  left: 4px;
+  font-size: 12px;
+}
+.inset-label > input {
+  padding-left: 20px;
 }
 
 /*# sourceMappingURL=main.css.map */

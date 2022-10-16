@@ -122,6 +122,7 @@ export default class SVGHandler {
     this.master.request('moveAllPaths', { textOffsetX, textOffsetY });
 
     // for some reason width and height are around 24px larger than they're supposed to
+    // it probably has to do with padding of the container svg is in
     const w = Math.round(maxX + textOffsetX - 24);
     const h = Math.round(maxY + textOffsetY - 24);
     this.svgElement.setAttributeNS(null, 'viewBox', `0 0 ${w} ${h}`);

@@ -1,0 +1,16 @@
+.inset-label {
+  position: relative;
+
+  display: block;
+
+  & > span {
+    position: absolute;
+    top: 0;
+    left: 4px;
+    font-size: 12px;
+  }
+
+  & > input {
+    padding-left: 20px;
+  }
+}

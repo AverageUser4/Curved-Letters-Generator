@@ -1,3 +1,5 @@
+@use 'var';
+
 .controls-container {
   display: grid;
   grid-template-columns: repeat(2, auto);
@@ -12,7 +14,7 @@
   padding: 8px;
 
   background-color: #151515;
-  border: 2px solid #aaa;
+  border: 2px solid var.$ui-border-color;
   border-radius: 5px;
 }
 
@@ -22,16 +24,6 @@
   justify-content: flex-start;
   width: max-content;
   gap: 12px;
-}
-
-.focus-button {
-  flex-grow: 0;
-  
-  padding: 6px;
-  display: block;
-}
-.focus-button--active {
-  background-color: hotpink;
 }
 
 .inputs-container__span {

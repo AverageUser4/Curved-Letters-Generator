@@ -35,6 +35,7 @@ export default class Path {
     this.master = master;
     this.svgElement = svg;
     this.index = index;
+    this.kind = kind;
 
     this.pointBases = [
       { x: 100, y: 250 }, 
@@ -42,7 +43,7 @@ export default class Path {
       { x: 390, y: 250 }, 
     ];
 
-    if(kind === 'cubic')
+    if(this.kind === 'cubic')
       this.pointBases = [
         { x: 100, y: 250 }, 
         { x: 150, y: 100 }, 
@@ -56,7 +57,7 @@ export default class Path {
     this.setUpSVGElements();
     this.resetPath();
 
-    this.master.request('addPathUI', { index: this.index, points: this.points });
+    this.master.request('addPathUI', { index: this.index, points: this.points, color: this.color, kind: this.kind });
     this.associatedUIElement = document.querySelector(`[data-path-ui="${index}"]`);
 
     this.allFocusButtons = Array.from(this.associatedUIElement.querySelectorAll('[data-focus-button]'));
@@ -81,7 +82,8 @@ export default class Path {
     this.pathElement.setAttributeNS(null, 'stroke', this.color, true);
 
     this.textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    this.textElement.setAttributeNS(null, 'font-size', '24px');
+    this.textElement.setAttributeNS(null, 'fill', '#fff');
+    // this.textElement.setAttributeNS(null, 'font-size', '24px');
 
     this.textPathElement = document.createElementNS('http://www.w3.org/2000/svg', 'textPath');
     this.textPathElement.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#${PathID}`);
@@ -139,7 +141,7 @@ export default class Path {
     this.textElement.addEventListener('wheel', (event) => onWheel(event), { passive: false });
 
     // focus text input when text is double clicked
-    // may add other invisible input that wont cause scrolling when typing (position fixed probably)
+    // maybe add other invisible input that wont cause scrolling when typing (position fixed probably)
     this.textElement.addEventListener('dblclick', () => {
       this.associatedUIElement.querySelector('[data-text-input="textContent"]')
         .focus({ preventScroll: true });
@@ -297,11 +299,11 @@ export default class Path {
   }
 
   resetPath() {
+    console.log('resetting')
     for(let i = 0; i < this.pointBases.length; i++) {
-      this.points[i] = this.pointBases[i];
-      // this.points[i] = {};
-      // this.points[i].x = this.pointBases[i].x;
-      // this.points[i].y = this.pointBases[i].y;
+      this.points[i] = {};
+      this.points[i].x = this.pointBases[i].x;
+      this.points[i].y = this.pointBases[i].y;
     }
 
     this.updatePath();

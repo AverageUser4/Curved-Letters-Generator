@@ -33,21 +33,39 @@ copySourceButton.addEventListener('click', () => {
   newSVG.removeAttributeNS(null, 'class');
   newSVG.removeAttributeNS(null, 'height');
 
-  const newPath = svg.querySelector('path').cloneNode(false);
-  newPath.removeAttributeNS(null, 'data-path');
-  newPath.removeAttributeNS(null, 'stroke');
-  newPath.setAttributeNS(null, 'id', id);
+  const newPaths = [];
+  for(let path of svg.querySelectorAll('path')) {
+    const newPath = path.cloneNode(false);
+    newPath.removeAttributeNS(null, 'data-path');
+    newPath.removeAttributeNS(null, 'stroke');
+    // newPath.setAttributeNS(null, 'id', id);
 
-  const newText = svg.querySelector('text').cloneNode(false);
+    newPaths.push(newPath);
+  }
 
-  const newTextPath = svg.querySelector('textPath').cloneNode(true);
-  newTextPath.removeAttributeNS(null, 'data-text-path');
-  newTextPath.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + id);
+  const newTexts = [];
+  for(let text of svg.querySelectorAll('text')) {
+    const newText = text.cloneNode(false);
+    newText.removeAttributeNS(null, 'fill');
 
-  newText.appendChild(newTextPath);
+    newTexts.push(newText);
+  }
 
-  newSVG.appendChild(newPath);
-  newSVG.appendChild(newText);
+  const newTextPaths = [];
+  for(let textPath of svg.querySelectorAll('textPath')) {
+    const newTextPath = textPath.cloneNode(true);
+    newTextPath.removeAttributeNS(null, 'data-text-path');
+    // newTextPath.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#' + id);
+
+    newTextPaths.push(newTextPath);
+  }
+
+  for(let i = 0; i < newTexts.length; i++) {
+    newTexts[i].append(newTextPaths[i]);
+  }
+
+  newSVG.append(...newPaths);
+  newSVG.append(...newTexts);
 
   navigator.clipboard.writeText(newSVG.outerHTML);
 

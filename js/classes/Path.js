@@ -137,6 +137,13 @@ export default class Path {
     this.pathElement.addEventListener('wheel', (event) => onWheel(event), { passive: false });
     // for some reason doesn't always fire when it's only on path
     this.textElement.addEventListener('wheel', (event) => onWheel(event), { passive: false });
+
+    // focus text input when text is double clicked
+    // may add other invisible input that wont cause scrolling when typing (position fixed probably)
+    this.textElement.addEventListener('dblclick', () => {
+      this.associatedUIElement.querySelector('[data-text-input="textContent"]')
+        .focus({ preventScroll: true });
+    });
   }
 
   addButtonListeners() {

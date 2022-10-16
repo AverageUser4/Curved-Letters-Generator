@@ -1,11 +1,7 @@
-- (maybe) add support to more complex paths
-- in some places code still behaves like there were both number and range inputs
+- (maybe) add support to more complex paths (more points)
 - the state of the webpage should be saved
+- change fuctions defined inside methods to methods (wont get redefined every time)
 
-- BIG UPDATE COMING SOON:
-  - by default there is no path
-  - user can choose between ellipsis, cubic and quadratic bezier
-  - if user chose a bezier they can add more points to make it longer (the same bezier)
 
   <svg width="320" height="320" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 

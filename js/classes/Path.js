@@ -1,14 +1,6 @@
 import colorMaster from './ColorMaster.js';
 
-const pointBases = [
-  { x: 100, y: 250 }, 
-  { x: 245, y: 100 }, 
-  { x: 390, y: 250 }, 
-];
-
 export default class Path {
-
-  index;
 
   svgElement;
   pathElement;
@@ -16,6 +8,9 @@ export default class Path {
   textPathElement;
   associatedUIElement;
   groupElement;
+
+  // identification
+  index;
 
   // for random colors of circles and paths
   svgBackgroundColor;
@@ -33,20 +28,32 @@ export default class Path {
   circles = [];
 
   // stores points' positions
+  pointBases;
   points = [];
-  /*
-    new structure:
-    points[0].x, points[0].y, etc.
-  */
 
-  constructor(master, svg, index) {
+  constructor(master, svg, index, kind) {
     this.master = master;
     this.svgElement = svg;
     this.index = index;
 
-    this.svgBackgroundColor = colorMaster.stringToObject(getComputedStyle(this.svgElement).backgroundColor);
+    this.pointBases = [
+      { x: 100, y: 250 }, 
+      { x: 245, y: 100 }, 
+      { x: 390, y: 250 }, 
+    ];
 
-    this.#setUpSVGElements();
+    if(kind === 'cubic')
+      this.pointBases = [
+        { x: 100, y: 250 }, 
+        { x: 150, y: 100 }, 
+        { x: 340, y: 100 },
+        { x: 390, y: 250 },
+      ];
+
+    const svgBackgroundColor = colorMaster.stringToObject(getComputedStyle(this.svgElement).backgroundColor);
+    this.color = colorMaster.getContrastingColor(svgBackgroundColor, true);
+
+    this.setUpSVGElements();
     this.resetPath();
 
     this.master.request('addPathUI', { index: this.index, points: this.points });
@@ -55,25 +62,23 @@ export default class Path {
     this.allFocusButtons = Array.from(this.associatedUIElement.querySelectorAll('[data-focus-button]'));
     this.pointInputs = this.associatedUIElement.querySelectorAll('[data-point-input]');
 
-    this.#addButtonListeners();
-    this.#addCircleListeners();
-    this.#addInputListeners();
-    this.#addPathMovementListeners();
-    this.#addTextListeners();
-
+    this.addButtonListeners();
+    this.addCircleListeners();
+    this.addInputListeners();
+    this.addPathMovementListeners();
+    this.addTextListeners();
   }
 
-  #setUpSVGElements() {
+  setUpSVGElements() {
     this.groupElement = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     this.groupElement.classList.add('svg__path-and-text-group');
-    this.groupElement.setAttributeNS(null, 'data-path-move-group', 1);
+    this.groupElement.setAttributeNS(null, 'data-path-group', this.index);
 
     const PathID = `ctg-${Math.random().toFixed(5)}`;
     this.pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     this.pathElement.setAttributeNS(null, 'id', PathID);
     this.pathElement.setAttributeNS(null, 'fill', 'transparent');
-    this.pathElement.setAttributeNS(null, 'stroke', 
-      colorMaster.getContrastingColor(this.svgBackgroundColor, true));
+    this.pathElement.setAttributeNS(null, 'stroke', this.color, true);
 
     this.textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     this.textElement.setAttributeNS(null, 'font-size', '24px');
@@ -89,10 +94,7 @@ export default class Path {
     this.textElement.style = 'font-size: 24px;';
   }
 
-  #addTextListeners() {
-    /*
-      DONE
-    */
+  addTextListeners() {
     this.associatedUIElement.querySelector('[data-text-input="size"]')
       .addEventListener('input', (event) => {
         this.textElement.style.fontSize = event.currentTarget.value + 'px';
@@ -114,9 +116,6 @@ export default class Path {
 
     // change x when scrolling over the path
     const onWheel = (event) => {
-      /*
-        needs testing
-      */
       event.preventDefault();
 
       if(event.ctrlKey) {
@@ -125,7 +124,7 @@ export default class Path {
         if(currentSize + amount < 1)
           amount = 1;
   
-        this.textElement.style.fontSize = currentSize + amount;
+        this.textElement.style.fontSize = currentSize + amount + 'px';
       } else {
         const currentX = Number(this.textElement.getAttributeNS(null, 'x'));
         const amount = event.wheelDeltaY > 0 ? 5 : -5;
@@ -140,7 +139,7 @@ export default class Path {
     this.textElement.addEventListener('wheel', (event) => onWheel(event), { passive: false });
   }
 
-  #addButtonListeners() {
+  addButtonListeners() {
     // resetting
     this.associatedUIElement.querySelector('[data-button="reset-path"]')
       .addEventListener('click', () => this.resetPath());
@@ -167,14 +166,7 @@ export default class Path {
       val.addEventListener('click', (event) => focusButtonOnClick(event));
   }
 
-  #addCircleListeners() {
-    /*
-      - circles have to be created in this object
-      - circles have to have names likes c1, c2, c3, etc. - start, control, end isn't universal
-      - they need to be added to the svg
-    */
-   const circleColor = colorMaster.getContrastingColor(this.svgBackgroundColor, true);
-
+  addCircleListeners() {
     for(let i = 0; i < this.points.length; i++) {
       const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       circle.classList.add('svg__bezier-circle');
@@ -182,7 +174,8 @@ export default class Path {
       circle.setAttributeNS(null, 'cx', this.points[i].x);
       circle.setAttributeNS(null, 'cy', this.points[i].y);
       circle.setAttributeNS(null, 'r', 7);
-      circle.setAttributeNS(null, 'fill', circleColor);
+      circle.setAttributeNS(null, 'fill', this.color);
+      circle.setAttributeNS(null, 'fill-opacity', 0.7);
 
       this.circles.push(circle);
     }
@@ -223,10 +216,7 @@ export default class Path {
     });
   }
 
-  #addInputListeners() {
-    /*
-      DONE
-    */
+  addInputListeners() {
     const onPathInputUpdate = (event) => {
       const parameter = event.currentTarget.getAttribute('data-point-input');
       
@@ -249,11 +239,7 @@ export default class Path {
     }
   }
 
-  #addPathMovementListeners() {
-    /*
-      DONE
-    */
-
+  addPathMovementListeners() {
     // drag and move
     this.groupElement.addEventListener('mousedown', (event) => {
       this.initialMousePosition.x = event.clientX;
@@ -281,9 +267,6 @@ export default class Path {
   }
 
   updatePointInputs() {
-    /*
-      DONE
-    */
     for(let input of this.pointInputs) {
       const which = input.getAttribute('data-point-input');
 
@@ -296,9 +279,6 @@ export default class Path {
   }
 
   updateCircles() {
-    /*
-      DONE
-    */
     for(let i = 0; i < this.circles.length; i++) {
       this.circles[i].setAttributeNS(null, 'cx', this.points[i].x);
       this.circles[i].setAttributeNS(null, 'cy', this.points[i].y);
@@ -306,34 +286,21 @@ export default class Path {
   }
 
   updatePath(invokedBy) {
-    // should be different on every class that inherits from this one
-    let d = `M ${this.points[0].x},${this.points[0].y} `;
-    d += `Q ${this.points[1].x},${this.points[1].y} `;
-    d += `${this.points[2].x},${this.points[2].y} `;
-
-    this.pathElement.setAttributeNS(null, 'd', d);
-
-    if(invokedBy !== 'input')
-      this.updatePointInputs();
-    if(invokedBy !== 'circle')
-      this.updateCircles();
+    console.error(`'updatePath' method invoked on base Path object. (should be implemented on inheriting classes)`);
   }
 
   resetPath() {
-    /*
-      DONE
-    */
-    for(let i = 0; i < pointBases.length; i++)
-      this.points[i] = pointBases[i];
+    for(let i = 0; i < this.pointBases.length; i++) {
+      this.points[i] = this.pointBases[i];
+      // this.points[i] = {};
+      // this.points[i].x = this.pointBases[i].x;
+      // this.points[i].y = this.pointBases[i].y;
+    }
 
     this.updatePath();
   }
 
   movePath(offsetX, offsetY) {
-    /*
-      DONE
-    */
-
     for(let i = 0; i < this.points.length; i++) {
       this.points[i].x += offsetX;
       this.points[i].y += offsetY;

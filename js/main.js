@@ -10,8 +10,7 @@ class Master {
     this.pathHandler =  new PathHandler(this, document.querySelector('svg'));
     this.pathUIHandler = new PathUIHandler(this);
 
-    // this.pathUIHandler.addPathUI({ index: 0, points: [{ x: 10, y: 10}, {x: 20, y: 20}, {x: 30, y: 30}] });
-    this.pathHandler.addPath();
+    this.pathHandler.addPath('quadratic');
   }
 
   request = (what, data) => {
@@ -28,9 +27,9 @@ class Master {
         this.pathHandler.removeGroupElement(data);
         break;
 
-      // case 'movePath':
-      //   this.pathHandler.movePath(data.textOffsetX, data.textOffsetY);
-      //   break;
+      case 'moveAllPaths':
+        this.pathHandler.moveAllPaths(data.textOffsetX, data.textOffsetY);
+        break;
 
       // case 'path':
       //   this.pathHandler.updatePath();

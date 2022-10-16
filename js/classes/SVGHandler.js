@@ -5,8 +5,7 @@ const svgInfoBases = {
 
 export default class SVGHandler {
 
-  svg = document.querySelector('svg');
-  text = document.querySelector('text');
+  svgElement = document.querySelector('svg');
 
   bottom = document.querySelector('[data-svg-stretch="bottom"]');
   right = document.querySelector('[data-svg-stretch="right"]');
@@ -64,7 +63,7 @@ export default class SVGHandler {
       if(!this.resizeDirection)
         return;
 
-      const svgRect = this.svg.getBoundingClientRect();
+      const svgRect = this.svgElement.getBoundingClientRect();
       let newWidth = event.clientX - svgRect.x;
       let newHeight = event.clientY - svgRect.y;
 
@@ -84,40 +83,57 @@ export default class SVGHandler {
     width = Math.min(Math.max(Math.round(width), 10), 2000);
     height = Math.min(Math.max(Math.round(height), 10), 2000);
 
-    this.svg.setAttributeNS(null, 'width', width);
-    this.svg.setAttributeNS(null, 'height', height);
-    this.svg.setAttributeNS(null, 'viewBox', `0 0 ${width} ${height}`);
+    this.svgElement.setAttributeNS(null, 'width', width);
+    this.svgElement.setAttributeNS(null, 'height', height);
+    this.svgElement.setAttributeNS(null, 'viewBox', `0 0 ${width} ${height}`);
 
-    this.master.request('adjustUIPosition');
+    // this.master.request('adjustUIPosition');
   }
 
   cropSVG() {
-    const svgRect = this.svg.getBoundingClientRect();
-    const textRect = this.text.getBoundingClientRect();
+    const textElements = this.svgElement.querySelectorAll('text');
+    let minX = Number.MAX_SAFE_INTEGER;
+    let minY = Number.MAX_SAFE_INTEGER;
 
-    let textOffsetX = Math.round(Math.abs(svgRect.x - textRect.x));
-    let textOffsetY = Math.round(Math.abs(svgRect.y - textRect.y));
+    let maxX = -Number.MAX_SAFE_INTEGER;
+    let maxY = -Number.MAX_SAFE_INTEGER;
 
-    if(textRect.x > svgRect.x)
+    for(let textElement of textElements) {
+      const textRect = textElement.getBoundingClientRect();
+
+      minX = Math.min(textRect.x, minX);
+      minY = Math.min(textRect.y, minY);
+
+      maxX = Math.max(textRect.right, maxX);
+      maxY = Math.max(textRect.bottom, maxY);
+    }
+
+    const svgRect = this.svgElement.getBoundingClientRect();
+
+    let textOffsetX = Math.round(Math.abs(svgRect.x - minX));
+    let textOffsetY = Math.round(Math.abs(svgRect.y - minY));
+
+    if(minX > svgRect.x)
       textOffsetX *= -1;
 
-    if(textRect.y > svgRect.y)
+    if(minY > svgRect.y)
       textOffsetY *= -1;
 
-    this.master.request('movePath', { textOffsetX: textOffsetX, textOffsetY: textOffsetY });
+    this.master.request('moveAllPaths', { textOffsetX, textOffsetY });
 
-    const w = Math.round(textRect.width);
-    const h = Math.round(textRect.height);
-    this.svg.setAttributeNS(null, 'viewBox', `0 0 ${w} ${h}`);
-    this.svg.setAttributeNS(null, 'width', w);
-    this.svg.setAttributeNS(null, 'height', h);
+    // for some reason width and height are around 24px larger than they're supposed to
+    const w = Math.round(maxX + textOffsetX - 24);
+    const h = Math.round(maxY + textOffsetY - 24);
+    this.svgElement.setAttributeNS(null, 'viewBox', `0 0 ${w} ${h}`);
+    this.svgElement.setAttributeNS(null, 'width', w);
+    this.svgElement.setAttributeNS(null, 'height', h);
 
     this.updateSizeInputs();
-    this.master.request('adjustUIPosition');
+    // this.master.request('adjustUIPosition');
   }
 
   updateSizeInputs() {
-    const update = (input, which) => input.value = this.svg.getAttributeNS(null, which);
+    const update = (input, which) => input.value = this.svgElement.getAttributeNS(null, which);
 
     for(let input of this.sizeInputs)
       update(input, input.getAttribute('data-svg-input'));

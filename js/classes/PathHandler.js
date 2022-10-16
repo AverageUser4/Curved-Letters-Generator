@@ -1,4 +1,6 @@
-import Path from './Path.js';
+import QuadraticBezier from './QuadraticBezier.js';
+import CubicBezier from './CubicBezier.js';
+import Ellipsis from './Ellipsis.js';
 
 export default class PathHandler {
 
@@ -25,24 +27,23 @@ export default class PathHandler {
   }
 
   addPath(kind) {
-    // switch(kind) {
-    //   case 'quadratic':
-    //     this.allPaths.set(this.nextPathIndex, new QuadraticBezier(master, svg, this.nextPathIndex));
-    //     break;
+    switch(kind) {
+      case 'quadratic':
+        this.allPaths.set(this.nextPathIndex, new QuadraticBezier(this.master, this.svgElement, this.nextPathIndex));
+        break;
 
-    //   case 'cubic':
-    //     this.allPaths.set(this.nextPathIndex, new CubicBezier(master, svg, this.nextPathIndex));
-    //     break;
+      case 'cubic':
+        this.allPaths.set(this.nextPathIndex, new CubicBezier(this.master, this.svgElement, this.nextPathIndex));
+        break;
 
-    //   case 'ellipsis':
-    //     this.allPaths.set(this.nextPathIndex, new Ellipsis(master, svg, this.nextPathIndex));
-    //     break;
+      case 'ellipsis':
+        // this.allPaths.set(this.nextPathIndex, new Ellipsis(this.master, this.svgElement, this.nextPathIndex));
+        console.log('not supported yet'); return;
+        break;
 
-    //   default:
-    //     console.error(`Unknown path kind '${kind}'.`);
-    // }
-
-    this.allPaths.set(this.nextPathIndex, new Path(this.master, this.svgElement, this.nextPathIndex));
+      default:
+        console.error(`Unknown path kind '${kind}'.`);
+    }
 
     const buf = this.nextPathIndex;
     document.querySelector(`[data-path-ui="${buf}"]`)
@@ -57,6 +58,12 @@ export default class PathHandler {
     this.allPaths.delete(index);
 
     this.master.request('removePathUI', { index });
+  }
+
+  moveAllPaths(offsetX, offsetY) {
+    for(let [key, path] of this.allPaths) {
+      path.movePath(offsetX, offsetY);
+    }
   }
 
 }

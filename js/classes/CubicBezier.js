@@ -6,7 +6,7 @@ export default class CubicBezier extends Path {
     super(master, svg, index, 'cubic');
   }
 
-  updatePath(invokedBy) {
+  updateDAttribute(invokedBy) {
     let d = `M ${this.points[0].x},${this.points[0].y} `;
     d += `C ${this.points[1].x},${this.points[1].y} `;
     d += `${this.points[2].x},${this.points[2].y} `;

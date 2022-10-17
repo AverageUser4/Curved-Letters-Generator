@@ -99,6 +99,18 @@
   max-height: 80px;
   box-sizing: border-box;
 }
+.path-ui__text-area--fixed {
+  position: fixed;
+  right: -324px;
+  top: 300px;
+
+  width: 300px;
+
+  transition: 500ms;
+}
+.path-ui__text-area--fixed-visible {
+  right: 24px;
+}
 
 .focus-button {
   flex-grow: 0;

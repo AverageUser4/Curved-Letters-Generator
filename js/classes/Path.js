@@ -17,6 +17,11 @@ export default class Path {
 
   // ui interaction
   pointInputs = [];
+  fontSizeInput;
+  textContentInput;
+  textContentFixedInput;
+  textXInput;
+  textStyleInput;
 
   // path movement
   initialMousePosition = { x: 0, y: 0 };
@@ -60,15 +65,21 @@ export default class Path {
 
     this.master.request('addPathUI', { index: this.index, points: this.points, color: this.color, kind: this.kind });
     this.associatedUIElement = document.querySelector(`[data-path-ui="${index}"]`);
+    
+    this.pointInputs = this.associatedUIElement.querySelectorAll('[data-point-input]');
+    this.fontSizeInput = this.associatedUIElement.querySelector('[data-text-input="size"]');
+    this.textContentInput = this.associatedUIElement.querySelector('[data-text-input="textContent"]');
+    this.textContentFixedInput = this.associatedUIElement.querySelector('[data-text-input="textContentFixed"]');
+    this.textXInput = this.associatedUIElement.querySelector('[data-text-input="x"]');
+    this.textStyleInput = this.associatedUIElement.querySelector('[data-text-input="style"]');
 
     this.allFocusButtons = Array.from(this.associatedUIElement.querySelectorAll('[data-focus-button]'));
-    this.pointInputs = this.associatedUIElement.querySelectorAll('[data-point-input]');
 
-    this.addButtonListeners();
-    this.addCircleListeners();
-    this.addInputListeners();
-    this.addPathMovementListeners();
-    this.addTextListeners();
+    this.#addButtonListeners();
+    this.#addCircleListeners();
+    this.#addInputListeners();
+    this.#addPathMovementListeners();
+    this.#addTextListeners();
   }
 
   setUpSVGElements() {
@@ -84,7 +95,6 @@ export default class Path {
 
     this.textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     this.textElement.setAttributeNS(null, 'fill', '#fff');
-    // this.textElement.setAttributeNS(null, 'font-size', '24px');
 
     this.textPathElement = document.createElementNS('http://www.w3.org/2000/svg', 'textPath');
     this.textPathElement.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#${PathID}`);
@@ -97,24 +107,89 @@ export default class Path {
     this.textElement.style = 'font-size: 24px;';
   }
 
-  addTextListeners() {
-    this.associatedUIElement.querySelector('[data-text-input="size"]')
-      .addEventListener('input', (event) => {
+  #addTextListeners() {
+    this.fontSizeInput.addEventListener('input', (event) => {
         this.textElement.style.fontSize = event.currentTarget.value + 'px';
-      });
+    });
 
-    this.associatedUIElement.querySelector('[data-text-input="textContent"]')
-      .addEventListener('input', (event) => {
-        this.textElement.children[0].textContent = event.currentTarget.value;
-      });
-
-    this.associatedUIElement.querySelector('[data-text-input="style"]')
-      .addEventListener('input', 
-        (event) =>  this.textElement.style = event.currentTarget.value);
-
-    const inputX = this.associatedUIElement.querySelector('[data-text-input="x"]');
-    inputX.addEventListener('input', (event) => {
+    this.textXInput.addEventListener('input', (event) => {
       this.textElement.setAttributeNS(null, 'x', event.currentTarget.value);
+    });
+
+    this.textContentInput.addEventListener('input', (event) => {
+      this.textElement.children[0].textContent = event.currentTarget.value;
+      this.textContentFixedInput.value = event.currentTarget.value;
+    });
+
+    this.textContentFixedInput.addEventListener('input', (event) => {
+      this.textElement.children[0].textContent = event.currentTarget.value;
+      this.textContentInput.value = event.currentTarget.value;
+    });
+
+    this.textContentFixedInput.addEventListener('focus', (event) => {
+      event.currentTarget.classList.add('path-ui__text-area--fixed-visible');
+
+      // always puts cursor at the end
+      const buf = event.currentTarget.value;
+      event.currentTarget.value = '';
+      event.currentTarget.value = buf;
+    });
+
+    this.textContentFixedInput.addEventListener('blur', () => {
+      this.textContentFixedInput.classList.remove('path-ui__text-area--fixed-visible');
+    });
+
+    // focus text input when text is double clicked
+    // maybe just move the input instead of using two (may look weird)
+    this.textElement.addEventListener('dblclick', () => {
+      this.textContentFixedInput.focus({ preventScroll: true });
+    });
+
+    this.textStyleInput.addEventListener('input', (event) => {
+      const regexp = /[^;]+:[^;]+/g;
+      const userStyle = event.currentTarget.value;
+
+      const properties = userStyle.match(regexp);
+      const keyValues = [];
+
+      if(properties)        
+        for(let property of properties) {
+          let key;
+          let value;
+
+          [key, value] = property.split(':');
+
+          key = key.trim().replace('\n', '');
+          value = value.trim().replace('\n', '');
+
+          if(!key || !value)
+            continue;
+
+          let dashIndex = key.indexOf('-');
+          while(dashIndex !== -1) {
+            key = 
+              key.slice(0, dashIndex) + 
+              key.slice(dashIndex + 1, dashIndex + 2).toUpperCase() +
+              key.slice(dashIndex + 2);
+
+            dashIndex = key.indexOf('-');
+          }
+
+          keyValues.push({ key, value });
+        }
+
+      const style = this.textElement.style;
+
+      for(let item of style)
+        if(item !== 'font-size')
+          style.removeProperty(item);
+        else
+          style.setProperty(item, '24px');
+
+      for(let i = 0; i < keyValues.length; i++)
+        style[keyValues[i].key] = keyValues[i].value;
+
+      this.fontSizeInput.value = parseInt(style.getPropertyValue('font-size'));
     });
 
     // change x when scrolling over the path
@@ -128,11 +203,13 @@ export default class Path {
           amount = 1;
   
         this.textElement.style.fontSize = currentSize + amount + 'px';
+        this.fontSizeInput.value = currentSize + amount;
       } else {
         const currentX = Number(this.textElement.getAttributeNS(null, 'x'));
         const amount = event.wheelDeltaY > 0 ? 5 : -5;
   
         this.textElement.setAttributeNS(null, 'x', currentX + amount);
+        this.textXInput.value = currentX + amount;
       }
 
     }
@@ -140,16 +217,9 @@ export default class Path {
     this.pathElement.addEventListener('wheel', (event) => onWheel(event), { passive: false });
     // for some reason doesn't always fire when it's only on path
     this.textElement.addEventListener('wheel', (event) => onWheel(event), { passive: false });
-
-    // focus text input when text is double clicked
-    // maybe add other invisible input that wont cause scrolling when typing (position fixed probably)
-    this.textElement.addEventListener('dblclick', () => {
-      this.associatedUIElement.querySelector('[data-text-input="textContent"]')
-        .focus({ preventScroll: true });
-    });
   }
 
-  addButtonListeners() {
+  #addButtonListeners() {
     // resetting
     this.associatedUIElement.querySelector('[data-button="reset-path"]')
       .addEventListener('click', () => this.resetPath());
@@ -176,7 +246,7 @@ export default class Path {
       val.addEventListener('click', (event) => focusButtonOnClick(event));
   }
 
-  addCircleListeners() {
+  #addCircleListeners() {
     for(let i = 0; i < this.points.length; i++) {
       const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       circle.classList.add('svg__bezier-circle');
@@ -234,11 +304,11 @@ export default class Path {
       this.circleNumbers[which].setAttributeNS(null, 'x', this.points[which].x - 3);
       this.circleNumbers[which].setAttributeNS(null, 'y', this.points[which].y + 4);
 
-      this.updatePath('circle');
+      this.updateDAttribute('circle');
     });
   }
 
-  addInputListeners() {
+  #addInputListeners() {
     const onPathInputUpdate = (event) => {
       const parameter = event.currentTarget.getAttribute('data-point-input');
       
@@ -246,7 +316,7 @@ export default class Path {
 
       this.points[indexAndAxis[0]][indexAndAxis[1]] = Number(event.currentTarget.value);
 
-      this.updatePath('input');
+      this.updateDAttribute('input');
     }
 
     for(let i = 0; i < this.points.length; i++) {
@@ -261,7 +331,7 @@ export default class Path {
     }
   }
 
-  addPathMovementListeners() {
+  #addPathMovementListeners() {
     // drag and move
     this.groupElement.addEventListener('mousedown', (event) => {
       this.initialMousePosition.x = event.clientX;
@@ -310,8 +380,8 @@ export default class Path {
     }
   }
 
-  updatePath(invokedBy) {
-    console.error(`'updatePath' method invoked on base Path object. (should be implemented on inheriting classes)`);
+  updateDAttribute(invokedBy) {
+    console.error(`'updateDAttribute' method invoked on base Path object. (should be implemented on inheriting classes)`);
   }
 
   resetPath() {
@@ -321,7 +391,7 @@ export default class Path {
       this.points[i].y = this.pointBases[i].y;
     }
 
-    this.updatePath();
+    this.updateDAttribute();
   }
 
   movePath(offsetX, offsetY) {
@@ -330,7 +400,7 @@ export default class Path {
       this.points[i].y += offsetY;
     }
 
-    this.updatePath();
+    this.updateDAttribute();
   }
 
   removeFromSVG() {

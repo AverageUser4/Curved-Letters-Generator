@@ -73,6 +73,7 @@ export default class PathUIHandler {
       container.innerHTML += `
         <section class="path-ui__text-area-container">
           <textarea class="path-ui__text-area" data-text-input="textContent">My Curved Text :)</textarea>
+          <textarea tabindex="0" class="path-ui__text-area path-ui__text-area--fixed" data-text-input="textContentFixed">My Curved Text :)</textarea>
         </section>
       `;
 

@@ -112,7 +112,8 @@ export default class SVGHandler {
   }
 
   cropSVG() {
-    const textElements = this.svgElement.querySelectorAll('text');
+    const textElements = this.svgElement.querySelectorAll('[data-text-on-path]');
+
     let minX = Number.MAX_SAFE_INTEGER;
     let minY = Number.MAX_SAFE_INTEGER;
 

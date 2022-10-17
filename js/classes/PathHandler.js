@@ -37,8 +37,7 @@ export default class PathHandler {
         break;
 
       case 'ellipsis':
-        // this.allPaths.set(this.nextPathIndex, new Ellipsis(this.master, this.svgElement, this.nextPathIndex));
-        console.log('not supported yet'); return;
+        this.allPaths.set(this.nextPathIndex, new Ellipsis(this.master, this.svgElement, this.nextPathIndex));
         break;
 
       default:

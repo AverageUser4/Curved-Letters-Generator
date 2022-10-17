@@ -10,7 +10,7 @@ class Master {
     this.pathHandler =  new PathHandler(this, document.querySelector('svg'));
     this.pathUIHandler = new PathUIHandler(this);
 
-    this.pathHandler.addPath('quadratic');
+    this.pathHandler.addPath('ellipsis');
   }
 
   request = (what, data) => {

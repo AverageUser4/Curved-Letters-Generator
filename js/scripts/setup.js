@@ -57,9 +57,10 @@ copySourceButton.addEventListener('click', () => {
   }
 
   const newTexts = [];
-  for(let text of svg.querySelectorAll('text')) {
+  for(let text of svg.querySelectorAll('[data-text-on-path]')) {
     const newText = text.cloneNode(false);
     newText.removeAttributeNS(null, 'fill');
+    newText.removeAttributeNS(null, 'data-text-on-path');
 
     newTexts.push(newText);
   }
@@ -82,7 +83,7 @@ copySourceButton.addEventListener('click', () => {
 
   navigator.clipboard.writeText(newSVG.outerHTML);
 
-  copySourceButton.textContent = 'COPIED!';
-  setTimeout(() => copySourceButton.textContent = 'COPY SOURCE', 800);
+  copySourceButton.textContent = 'Copied!';
+  setTimeout(() => copySourceButton.textContent = 'Save', 800);
 });
 //////////////////////////////////////////////////////////////

@@ -4,6 +4,7 @@ export default class QuadraticBezier extends Path {
 
   constructor(master, svg, index) {
     super(master, svg, index, 'quadratic');
+    this.updateDAttribute();
   }
 
   updateDAttribute(invokedBy) {
@@ -18,5 +19,4 @@ export default class QuadraticBezier extends Path {
     if(invokedBy !== 'circle')
       this.updateCircles();
   }
-
 }

@@ -4,6 +4,7 @@ export default class CubicBezier extends Path {
 
   constructor(master, svg, index) {
     super(master, svg, index, 'cubic');
+    this.updateDAttribute();
   }
 
   updateDAttribute(invokedBy) {

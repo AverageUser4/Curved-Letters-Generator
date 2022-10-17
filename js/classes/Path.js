@@ -9,6 +9,9 @@ export default class Path {
   associatedUIElement;
   groupElement;
 
+  // so children won't crash
+  firstPathReset = true;
+
   // identification
   index;
 
@@ -57,6 +60,13 @@ export default class Path {
         { x: 390, y: 250 },
       ];
 
+    if(this.kind === 'ellipsis')
+      this.pointBases = [
+        { x: 100, y: 250 },
+        { x: 390, y: 250 },
+        { x: 100, y: 250 },
+      ];
+
     const svgBackgroundColor = colorMaster.stringToObject(getComputedStyle(this.svgElement).backgroundColor);
     this.color = colorMaster.getContrastingColor(svgBackgroundColor, true);
 
@@ -95,6 +105,7 @@ export default class Path {
 
     this.textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     this.textElement.setAttributeNS(null, 'fill', '#fff');
+    this.textElement.setAttributeNS(null, 'data-text-on-path', '');
 
     this.textPathElement = document.createElementNS('http://www.w3.org/2000/svg', 'textPath');
     this.textPathElement.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#${PathID}`);
@@ -224,19 +235,38 @@ export default class Path {
     this.associatedUIElement.querySelector('[data-button="reset-path"]')
       .addEventListener('click', () => this.resetPath());
 
+    this.associatedUIElement.querySelector('[data-button="toggle-path-visibility"]')
+      .addEventListener('click', (event) => {
+        if(
+            !this.pathElement.style.display || 
+            this.pathElement.style.display === 'inline'
+          ) {
+          this.pathElement.style.display = 'none';
+          this.circles.forEach((circle) => circle.style.display = 'none');
+          this.circleNumbers.forEach((number) => number.style.display = 'none');
+          event.currentTarget.textContent = 'Show Path';
+        } else {
+          this.pathElement.style.display = 'inline';
+          this.circles.forEach((circle) => circle.style.display = 'inline');
+          this.circleNumbers.forEach((number) => number.style.display = 'inline');
+          event.currentTarget.textContent = 'Hide Path';
+        }
+        
+      });
+
     // focusing
     const focusButtonOnClick = (event) => {
       const which = event.currentTarget.getAttribute('data-focus-button');
 
       for(let val of this.allFocusButtons)
-        val.classList.remove('focus-button--active');
+        val.classList.remove('mini-button--active');
 
       if(this.focusedCircle === this.circles[which]) {
         this.focusedCircle = null;
         return;
       }
 
-      event.currentTarget.classList.add('focus-button--active');
+      event.currentTarget.classList.add('mini-button--active');
       this.focusedCircle = this.circles[which];
 
       event.stopPropagation();
@@ -282,7 +312,7 @@ export default class Path {
     window.addEventListener('mouseup', () => {
       this.focusedCircle = null;
       for(let button of this.allFocusButtons)
-        button.classList.remove('focus-button--active');
+        button.classList.remove('mini-button--active');
     });
 
     window.addEventListener('mousemove', (event) => {
@@ -389,6 +419,12 @@ export default class Path {
       this.points[i] = {};
       this.points[i].x = this.pointBases[i].x;
       this.points[i].y = this.pointBases[i].y;
+    }
+
+    // so children won't crash
+    if(this.firstPathReset) {
+      this.firstPathReset = false;
+      return;
     }
 
     this.updateDAttribute();

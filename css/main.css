@@ -259,11 +259,9 @@ legend {
   flex-grow: 1;
 }
 
-.path-ui__inputs-container {
-  padding: 0 4px;
-}
-
-.path-ui__text-area-container {
+.path-ui__inputs-part {
+  display: grid;
+  gap: 6px;
   padding: 0 4px;
 }
 
@@ -279,21 +277,21 @@ legend {
   right: -324px;
   top: 300px;
   width: 300px;
-  transition: 500ms;
+  transition: 300ms;
 }
 
 .path-ui__text-area--fixed-visible {
   right: 24px;
 }
 
-.focus-button {
+.mini-button {
   flex-grow: 0;
   display: block;
   padding: 1px 8px;
   font-size: 12px;
 }
 
-.focus-button--active {
+.mini-button--active {
   background-color: hotpink;
 }
 
@@ -346,6 +344,7 @@ legend {
   left: 4px;
   font-size: 12px;
   color: #ddd;
+  user-select: none;
 }
 .inset-label > input {
   padding-left: 20px;
